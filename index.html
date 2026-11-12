@@ -3,823 +3,588 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#170e25">
-<meta name="description" content="Agende seu horário no nosso salão de beleza.">
 <title>Bella Beauty | Salão de Beleza</title>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap');
-
 :root {
-  --bg:#130d1d;
-  --panel:#21152e;
-  --panel2:#2b1b39;
-  --pink:#ff4f91;
-  --purple:#a855f7;
-  --coral:#ff906f;
-  --gold:#f6c76b;
-  --text:#fff7fc;
-  --muted:#b9a9c3;
+ --bg:#150d20;--panel:#241630;--pink:#ff4f91;
+ --purple:#a855f7;--gold:#f6c76b;--text:#fff;
+ --muted:#c3b2cd;--green:#39d69a;
 }
-
-* {box-sizing:border-box;margin:0;padding:0}
-
-body {
-  background:
-    radial-gradient(circle at 10% 0%,#54204b55,transparent 35%),
-    radial-gradient(circle at 100% 30%,#582c8050,transparent 35%),
-    var(--bg);
-  color:var(--text);
-  font-family:'DM Sans',sans-serif;
-  min-height:100vh;
+*{box-sizing:border-box}
+body{
+ margin:0;color:var(--text);font-family:Arial,sans-serif;
+ background:radial-gradient(circle at top left,#512044,transparent 40%),var(--bg);
+ min-height:100vh
 }
-
-button,input,select,textarea {font:inherit}
-button {cursor:pointer}
-
-header {
-  padding:20px 6%;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  border-bottom:1px solid #ffffff12;
-  background:#160e20d9;
-  position:sticky;
-  top:0;
-  z-index:10;
-  backdrop-filter:blur(15px);
+header{
+ padding:18px 5%;display:flex;justify-content:space-between;
+ align-items:center;background:#160e20eF;border-bottom:1px solid #ffffff20;
+ position:sticky;top:0;z-index:5
 }
-
-.logo {
-  font-family:'Playfair Display',serif;
-  font-size:25px;
-  font-weight:800;
-  background:linear-gradient(90deg,#ff70a8,#c084fc,#f6c76b);
-  -webkit-background-clip:text;
-  color:transparent;
+.logo{
+ font-size:25px;font-weight:bold;
+ background:linear-gradient(90deg,#ff75aa,#c084fc,#f6c76b);
+ -webkit-background-clip:text;color:transparent
 }
-
-.logo small {
-  display:block;
-  font:10px 'DM Sans',sans-serif;
-  letter-spacing:4px;
-  color:#d9b7e9;
-  text-align:center;
+.logo small{display:block;font-size:10px;letter-spacing:4px;text-align:center}
+button{
+ border:0;cursor:pointer;border-radius:12px;padding:12px 17px;
+ font-weight:bold;color:white;
+ background:linear-gradient(100deg,var(--pink),var(--purple))
 }
-
-nav {display:flex;gap:20px;align-items:center}
-nav a {
-  color:#e6d7ec;
-  text-decoration:none;
-  font-size:13px;
-  font-weight:600;
+button:disabled{opacity:.4;cursor:not-allowed}
+main{max-width:1050px;margin:auto;padding:25px 16px 60px}
+.card{
+ background:linear-gradient(145deg,#2c1b3b,#20132b);
+ border:1px solid #ffffff18;border-radius:20px;padding:22px;
+ margin-bottom:20px
 }
-nav a:hover {color:var(--pink)}
-
-.admin-btn {
-  background:linear-gradient(110deg,var(--pink),var(--purple));
-  border:0;
-  color:white;
-  padding:10px 16px;
-  border-radius:30px;
-  font-weight:800;
-  font-size:12px;
+h1,h2{font-family:Georgia,serif}
+h1{font-size:38px}
+h1 span{color:#ff83b2}
+p{color:var(--muted);line-height:1.6}
+input,select,textarea{
+ width:100%;padding:13px;margin:7px 0 15px;
+ border:1px solid #ffffff25;border-radius:10px;
+ background:#170e22;color:white;outline:none
 }
-
-main {max-width:1150px;margin:auto;padding:30px 20px 70px}
-
-.hero {
-  position:relative;
-  overflow:hidden;
-  padding:55px 35px;
-  border-radius:28px;
-  background:
-    linear-gradient(110deg,#3b1740ee,#231638ee 55%,#38204fdd),
-    var(--panel);
-  border:1px solid #ff8fc533;
-  box-shadow:0 20px 70px #0005;
-  margin-bottom:35px;
+label{font-size:13px;font-weight:bold;color:#f5d9eb}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:13px}
+.service{
+ background:#170e22;border:1px solid #ffffff20;
+ padding:16px;border-radius:15px
 }
-
-.hero:after {
-  content:"✿";
-  position:absolute;
-  right:6%;
-  top:10px;
-  font-size:180px;
-  color:#ff8bc51a;
-  transform:rotate(-15deg);
+.service strong{display:block;margin:8px 0}
+.price{color:#ff9ec4;font-size:19px;font-weight:bold}
+.hidden{display:none!important}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.tabs button{background:#382443}
+.tabs button.active{background:linear-gradient(100deg,var(--pink),var(--purple))}
+.item{
+ background:#170e22;padding:15px;border-radius:12px;
+ margin:10px 0;border-left:3px solid var(--pink);font-size:13px
 }
-
-.hero-content {position:relative;z-index:1;max-width:650px}
-
-.tag {
-  display:inline-block;
-  color:#ffd2e5;
-  background:#ff4f9122;
-  border:1px solid #ff4f9155;
-  padding:8px 15px;
-  border-radius:30px;
-  font-size:11px;
-  letter-spacing:2px;
-  font-weight:800;
-  margin-bottom:18px;
-}
-
-h1 {
-  font:800 clamp(34px,6vw,58px)/1.1 'Playfair Display',serif;
-  margin-bottom:18px;
-}
-h1 span {
-  background:linear-gradient(90deg,#ff72a9,#c084fc,#ffd18a);
-  -webkit-background-clip:text;
-  color:transparent;
-}
-
-.hero p {color:#e2d3e9;line-height:1.8;max-width:510px;font-size:14px}
-
-.primary-btn {
-  border:0;
-  background:linear-gradient(100deg,var(--pink),var(--purple));
-  color:white;
-  padding:15px 24px;
-  border-radius:30px;
-  font-weight:800;
-  margin-top:25px;
-  box-shadow:0 8px 25px #ff4f9140;
-  transition:.25s;
-}
-.primary-btn:hover {transform:translateY(-3px);filter:brightness(1.12)}
-
-.section-title {margin:40px 0 20px}
-.section-title h2 {font:700 27px 'Playfair Display',serif}
-.section-title p {color:var(--muted);font-size:13px;margin-top:7px}
-
-.services {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:15px;
-}
-
-.service {
-  background:linear-gradient(145deg,#2b1b39,#20142b);
-  border:1px solid #ffffff12;
-  padding:20px;
-  border-radius:19px;
-  transition:.25s;
-}
-.service:hover {transform:translateY(-5px);border-color:#ff70a855}
-
-.service-icon {
-  width:48px;height:48px;
-  display:grid;place-items:center;
-  border-radius:15px;
-  font-size:24px;
-  margin-bottom:15px;
-  background:linear-gradient(135deg,#ff4f9133,#a855f733);
-}
-.service h3 {font-size:15px;margin-bottom:7px}
-.service p {font-size:12px;color:var(--muted);line-height:1.6}
-.price {color:#ffc0da;font-size:19px;font-weight:800;margin-top:14px}
-
-.professionals {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:15px;
-}
-.professional {
-  background:var(--panel);
-  border:1px solid #ffffff12;
-  border-radius:18px;
-  padding:20px;
-  text-align:center;
-}
-.avatar {
-  width:68px;height:68px;
-  border-radius:50%;
-  display:grid;place-items:center;
-  margin:0 auto 12px;
-  font-size:30px;
-  background:linear-gradient(135deg,var(--pink),var(--purple));
-}
-.professional h3 {font-size:15px}
-.professional p {color:var(--muted);font-size:12px;margin-top:5px}
-
-.booking {
-  background:linear-gradient(145deg,#2b1b39,#20142b);
-  border:1px solid #d17bca44;
-  padding:25px;
-  border-radius:23px;
-  margin-top:40px;
-}
-.booking h2 {font:700 27px 'Playfair Display',serif;margin-bottom:8px}
-.booking>p {color:var(--muted);font-size:13px;margin-bottom:25px}
-
-.form-grid {
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-}
-.field {display:flex;flex-direction:column;gap:8px}
-.field.full {grid-column:1/-1}
-.field label {font-size:12px;font-weight:700;color:#f5d8e9}
-.field input,.field select,.field textarea {
-  background:#170f22;
-  border:1px solid #ffffff20;
-  border-radius:12px;
-  padding:13px;
-  color:white;
-  outline:none;
-  width:100%;
-}
-.field input:focus,.field select:focus,.field textarea:focus {
-  border-color:var(--pink);
-}
-.field option {background:#21152e}
-
-.slots {
-  display:flex;
-  flex-wrap:wrap;
-  gap:9px;
-}
-.slot {
-  border:1px solid #ffffff25;
-  background:#170f22;
-  color:#eee;
-  border-radius:10px;
-  padding:10px 14px;
-  font-size:12px;
-}
-.slot.selected {
-  background:linear-gradient(100deg,var(--pink),var(--purple));
-  border-color:transparent;
-  color:white;
-  font-weight:800;
-}
-.slot:disabled {opacity:.3;cursor:not-allowed;text-decoration:line-through}
-
-#message {
-  margin-top:15px;
-  padding:12px;
-  border-radius:10px;
-  display:none;
-  font-size:13px;
-}
-.success {background:#168c5b30;color:#8df2bd}
-.error {background:#d6385830;color:#ffb2c0}
-
-.my-bookings {
-  margin-top:35px;
-  padding:23px;
-  border-radius:20px;
-  background:#21152e;
-  border:1px solid #ffffff12;
-}
-.my-bookings h2 {font:700 24px 'Playfair Display',serif;margin-bottom:15px}
-.booking-item {
-  padding:15px;
-  background:#170f22;
-  border-radius:12px;
-  margin-top:10px;
-  border-left:3px solid var(--pink);
-  font-size:13px;
-  line-height:1.8;
-}
-.booking-item button,.small-btn {
-  border:0;
-  background:#ff4f9122;
-  color:#ff9fc2;
-  padding:7px 11px;
-  border-radius:8px;
-  font-size:11px;
-  font-weight:700;
-  margin-top:8px;
-}
-
-.benefits {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:15px;
-  margin-top:35px;
-}
-.benefit {
-  background:linear-gradient(130deg,#ff4f9120,#a855f720);
-  border:1px solid #ffffff12;
-  padding:20px;
-  border-radius:17px;
-}
-.benefit strong {display:block;margin-bottom:7px}
-.benefit p {font-size:12px;color:var(--muted);line-height:1.6}
-
-.admin-panel {
-  display:none;
-  margin-top:35px;
-  padding:25px;
-  background:#21152e;
-  border:1px solid #f6c76b55;
-  border-radius:22px;
-}
-.admin-panel h2 {font:700 26px 'Playfair Display',serif;margin-bottom:20px}
-.admin-stats {
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
-  gap:12px;
-  margin-bottom:20px;
-}
-.stat {
-  background:#170f22;
-  padding:17px;
-  border-radius:14px;
-}
-.stat strong {display:block;font-size:25px;color:#ff91bb}
-.stat span {font-size:11px;color:var(--muted)}
-.admin-list {margin-top:15px}
-.admin-list h3 {margin:20px 0 10px;font-size:15px;color:#ffd2e5}
-
-footer {
-  border-top:1px solid #ffffff12;
-  padding:30px 20px;
-  text-align:center;
-  color:var(--muted);
-  font-size:12px;
-}
-footer strong {
-  display:block;
-  color:#ff9bc1;
-  font:700 22px 'Playfair Display',serif;
-  margin-bottom:8px;
-}
-
-@media(max-width:650px) {
-  header {padding:15px 5%}
-  nav {gap:10px}
-  nav a {display:none}
-  .hero {padding:40px 23px}
-  .hero:after {font-size:110px;right:-10px;top:30px}
-  main {padding:22px 14px 50px}
-  .form-grid {grid-template-columns:1fr}
-  .field.full {grid-column:auto}
-  .booking {padding:19px}
-}
+.item button{margin:5px 5px 0 0;padding:8px 10px;font-size:11px}
+.slot{background:#382443;margin:4px;padding:10px}
+.slot.selected{background:var(--pink)}
+.notice{padding:12px;border-radius:10px;background:#ffffff12;margin:10px 0}
+footer{text-align:center;padding:25px;color:var(--muted);font-size:12px}
+@media(max-width:550px){h1{font-size:30px}header{padding:14px}}
 </style>
 </head>
-
 <body>
 
 <header>
-  <div class="logo">Bella Beauty<small>SALÃO DE BELEZA</small></div>
-  <nav>
-    <a href="#inicio">Início</a>
-    <a href="#servicos">Serviços</a>
-    <a href="#equipe">Profissionais</a>
-    <a href="#agendar">Agendar</a>
-    <button class="admin-btn" onclick="adminLogin()">Área administrativa</button>
-  </nav>
+ <div class="logo">Bella Beauty<small>SALÃO DE BELEZA</small></div>
+ <button id="logout" class="hidden" onclick="sair()">Sair</button>
 </header>
 
 <main>
 
-<section class="hero" id="inicio">
-  <div class="hero-content">
-    <span class="tag">SEU MOMENTO DE BRILHAR ✨</span>
-    <h1>Realce sua beleza.<br><span>Desperte sua essência.</span></h1>
-    <p>Um espaço especial para cuidar de você. Venha viver uma experiência de beleza, carinho e autoestima.</p>
-    <button class="primary-btn" onclick="document.getElementById('agendar').scrollIntoView({behavior:'smooth'})">
-      Agendar meu horário ✨
-    </button>
-  </div>
+<!-- LOGIN E CADASTRO -->
+<section id="acesso" class="card">
+ <h1>Bem-vinda à <span>Bella Beauty</span> 🌸</h1>
+ <p>Entre na sua conta ou faça seu cadastro para agendar seu momento de beleza.</p>
+
+ <div class="tabs">
+  <button id="tabCliente" class="active" onclick="mostrarAcesso('cliente')">Cliente</button>
+  <button id="tabAdmin" onclick="mostrarAcesso('admin')">Administrador</button>
+ </div>
+
+ <form id="formCliente">
+  <h2>Área do Cliente 💗</h2>
+  <label>Seu nome</label>
+  <input id="nome" required placeholder="Nome completo">
+  <label>E-mail</label>
+  <input id="email" type="email" required placeholder="Seu e-mail">
+  <label>Senha</label>
+  <input id="senha" type="password" minlength="6" required placeholder="Mínimo de 6 caracteres">
+  <button type="submit">Entrar / Criar minha conta</button>
+  <p style="font-size:12px">Se o e-mail ainda não estiver cadastrado, uma conta será criada.</p>
+ </form>
+
+ <form id="formAdmin" class="hidden">
+  <h2>Área Administrativa 🔐</h2>
+  <label>E-mail do administrador</label>
+  <input id="adminEmail" type="email" required placeholder="E-mail administrativo">
+  <label>Senha administrativa</label>
+  <input id="adminSenha" type="password" required placeholder="Sua senha">
+  <button type="submit">Acessar painel</button>
+ </form>
+ <div id="mensagem"></div>
 </section>
 
-<section id="servicos">
-  <div class="section-title">
-    <h2>Nossos serviços 🌸</h2>
-    <p>Escolha seu cuidado especial.</p>
-  </div>
-  <div class="services" id="service-list"></div>
-</section>
+<!-- ÁREA DO CLIENTE -->
+<section id="areaCliente" class="hidden">
+ <div class="card">
+  <h1>Olá, <span id="nomeCliente"></span>! 💕</h1>
+  <p>Seu espaço de beleza e bem-estar começa aqui.</p>
+ </div>
 
-<section id="equipe">
-  <div class="section-title">
-    <h2>Quem cuida de você 💖</h2>
-    <p>Profissionais preparadas para valorizar sua beleza.</p>
-  </div>
-  <div class="professionals" id="professional-list"></div>
-</section>
+ <div class="card">
+  <h2>Escolha seu serviço ✨</h2>
+  <div id="servicos" class="grid"></div>
+ </div>
 
-<section class="booking" id="agendar">
-  <h2>Agende seu momento ✨</h2>
-  <p>Preencha os dados abaixo e escolha seu melhor horário.</p>
+ <div class="card">
+  <h2>Agende seu horário 📅</h2>
+  <form id="formAgendamento">
+   <label>Serviço</label>
+   <select id="servicoEscolhido" required></select>
 
-  <form id="booking-form">
-    <div class="form-grid">
+   <label>Profissional</label>
+   <select id="profissional" required>
+    <option value="Ana Silva">Ana Silva</option>
+    <option value="Mariana Costa">Mariana Costa</option>
+    <option value="Juliana Santos">Juliana Santos</option>
+   </select>
 
-      <div class="field full">
-        <label>Seu nome completo</label>
-        <input id="client-name" required placeholder="Digite seu nome">
-      </div>
+   <label>Data</label>
+   <input id="data" type="date" required>
 
-      <div class="field">
-        <label>WhatsApp</label>
-        <input id="client-phone" type="tel" required placeholder="(84) 99999-9999">
-      </div>
+   <label>Horário</label>
+   <select id="horario" required>
+    <option value="">Escolha a data e a profissional primeiro</option>
+   </select>
 
-      <div class="field">
-        <label>Serviço desejado</label>
-        <select id="service-select" required></select>
-      </div>
+   <label>Observações</label>
+   <textarea id="observacao" rows="3" placeholder="Conte-nos alguma preferência"></textarea>
 
-      <div class="field">
-        <label>Profissional</label>
-        <select id="professional-select" required></select>
-      </div>
-
-      <div class="field">
-        <label>Data desejada</label>
-        <input type="date" id="booking-date" required>
-      </div>
-
-      <div class="field full">
-        <label>Escolha um horário</label>
-        <div class="slots" id="time-slots"></div>
-      </div>
-
-      <div class="field full">
-        <label>Observações (opcional)</label>
-        <textarea id="notes" rows="3" placeholder="Alguma preferência ou informação?"></textarea>
-      </div>
-
-      <div class="field full">
-        <button class="primary-btn" type="submit" style="width:100%;margin-top:0">
-          Confirmar agendamento 💗
-        </button>
-      </div>
-    </div>
+   <button type="submit">Confirmar agendamento 💗</button>
   </form>
+  <div id="resultado"></div>
+ </div>
 
-  <div id="message"></div>
+ <div class="card">
+  <h2>Meus agendamentos 📋</h2>
+  <p>Aqui aparecem somente os seus horários.</p>
+  <div id="meusAgendamentos"></div>
+ </div>
 </section>
 
-<section class="my-bookings">
-  <h2>Consultar meus horários 📅</h2>
-  <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Informe seu WhatsApp para consultar seus agendamentos.</p>
-  <div class="field">
-    <input id="search-phone" placeholder="Digite seu WhatsApp">
-    <button class="primary-btn" onclick="findBookings()" style="margin-top:5px">Consultar horários</button>
-  </div>
-  <div id="my-bookings-list"></div>
-</section>
+<!-- ÁREA ADMINISTRATIVA -->
+<section id="areaAdmin" class="hidden">
+ <div class="card">
+  <h1>Painel <span>Administrativo</span> 👑</h1>
+  <p>Controle completo do salão Bella Beauty.</p>
+ </div>
 
-<section class="benefits">
-  <div class="benefit">
-    <strong>💎 Atendimento especial</strong>
-    <p>Cuidamos de cada detalhe para proporcionar uma experiência agradável.</p>
-  </div>
-  <div class="benefit">
-    <strong>🌷 Seu momento</strong>
-    <p>Um ambiente pensado para valorizar sua autoestima e bem-estar.</p>
-  </div>
-  <div class="benefit">
-    <strong>📅 Agendamento fácil</strong>
-    <p>Escolha o serviço, a profissional e o horário de sua preferência.</p>
-  </div>
-</section>
+ <div class="grid">
+  <div class="card"><h2 id="total">0</h2><p>Agendamentos</p></div>
+  <div class="card"><h2 id="pendentes">0</h2><p>Em aberto</p></div>
+  <div class="card"><h2 id="concluidos">0</h2><p>Concluídos</p></div>
+ </div>
 
-<section class="admin-panel" id="admin-panel">
-  <h2>💼 Painel administrativo</h2>
-  <div class="admin-stats">
-    <div class="stat"><strong id="total-bookings">0</strong><span>Agendamentos</span></div>
-    <div class="stat"><strong id="today-bookings">0</strong><span>Para hoje</span></div>
-    <div class="stat"><strong id="total-services">0</strong><span>Serviços</span></div>
-  </div>
+ <div class="card">
+  <h2>Todos os agendamentos</h2>
+  <div id="todosAgendamentos"></div>
+ </div>
 
-  <button class="small-btn" onclick="addService()">+ Adicionar serviço</button>
-  <button class="small-btn" onclick="addProfessional()">+ Adicionar profissional</button>
-  <button class="small-btn" onclick="exportBookings()">Exportar agendamentos</button>
-  <button class="small-btn" onclick="adminLogout()">Sair do painel</button>
-
-  <div class="admin-list">
-    <h3>Agendamentos recebidos</h3>
-    <div id="admin-bookings"></div>
-  </div>
+ <div class="card">
+  <h2>Adicionar serviço</h2>
+  <form id="formNovoServico">
+   <label>Nome do serviço</label>
+   <input id="novoNome" required placeholder="Ex: Design de sobrancelhas">
+   <label>Preço</label>
+   <input id="novoPreco" type="number" min="0" step="0.01" required>
+   <button type="submit">Cadastrar serviço</button>
+  </form>
+  <div id="listaAdminServicos"></div>
+ </div>
 </section>
 
 </main>
 
 <footer>
-  <strong>Bella Beauty 🌸</strong>
-  Seu momento de beleza começa aqui.
-  <p style="margin-top:10px">© 2026 Bella Beauty. Todos os direitos reservados.</p>
+ <strong>Bella Beauty 🌸</strong><br>
+ Seu momento de beleza começa aqui.
 </footer>
 
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
 <script>
-const defaultServices = [
-  {id:1,name:"Corte feminino",desc:"Corte e finalização dos cabelos.",price:65,icon:"✂️"},
-  {id:2,name:"Escova",desc:"Cabelos alinhados e com brilho.",price:50,icon:"💇‍♀️"},
-  {id:3,name:"Manicure",desc:"Cuidado e beleza para suas unhas.",price:30,icon:"💅"},
-  {id:4,name:"Pedicure",desc:"Cuidado especial para seus pés.",price:35,icon:"🦶"},
-  {id:5,name:"Coloração",desc:"Renove seu visual com novas cores.",price:120,icon:"🎨"},
-  {id:6,name:"Hidratação",desc:"Tratamento para cabelos saudáveis.",price:80,icon:"✨"}
+// 1. COLOQUE A CONFIGURAÇÃO DO SEU FIREBASE AQUI
+const firebaseConfig = {
+ apiKey: "SUA_API_KEY",
+ authDomain: "SEU_PROJETO.firebaseapp.com",
+ projectId: "SEU_PROJETO",
+ storageBucket: "SEU_PROJETO.firebasestorage.app",
+ messagingSenderId: "SEU_SENDER_ID",
+ appId: "SEU_APP_ID"
+};
+
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+let usuario = null;
+let perfil = null;
+let servicos = [];
+let horariosOcupados = [];
+let pararAgendamentos = null;
+let pararServicos = null;
+
+const padrao = [
+ {nome:"Corte feminino",preco:65,icone:"✂️"},
+ {nome:"Escova",preco:50,icone:"💇‍♀️"},
+ {nome:"Manicure",preco:30,icone:"💅"},
+ {nome:"Pedicure",preco:35,icone:"🌸"},
+ {nome:"Coloração",preco:120,icone:"🎨"},
+ {nome:"Hidratação",preco:80,icone:"✨"}
 ];
 
-const defaultProfessionals = [
-  {id:1,name:"Ana Silva",role:"Cabeleireira",icon:"👩🏻‍🦰"},
-  {id:2,name:"Mariana Costa",role:"Manicure e pedicure",icon:"💅"},
-  {id:3,name:"Juliana Santos",role:"Especialista em beleza",icon:"👩🏽"}
-];
-
-let services = JSON.parse(localStorage.getItem("bb_services")) || defaultServices;
-let professionals = JSON.parse(localStorage.getItem("bb_professionals")) || defaultProfessionals;
-let bookings = JSON.parse(localStorage.getItem("bb_bookings")) || [];
-let selectedTime = "";
-let adminActive = false;
-
-const $ = id => document.getElementById(id);
-
-function saveData() {
-  localStorage.setItem("bb_services",JSON.stringify(services));
-  localStorage.setItem("bb_professionals",JSON.stringify(professionals));
-  localStorage.setItem("bb_bookings",JSON.stringify(bookings));
+function mostrarAcesso(tipo){
+ document.getElementById("formCliente").classList.toggle("hidden",tipo!=="cliente");
+ document.getElementById("formAdmin").classList.toggle("hidden",tipo!=="admin");
+ document.getElementById("tabCliente").classList.toggle("active",tipo==="cliente");
+ document.getElementById("tabAdmin").classList.toggle("active",tipo==="admin");
 }
 
-function renderServices() {
-  $("service-list").innerHTML = services.map(s => `
-    <div class="service">
-      <div class="service-icon">${s.icon}</div>
-      <h3>${escapeHTML(s.name)}</h3>
-      <p>${escapeHTML(s.desc)}</p>
-      <div class="price">R$ ${Number(s.price).toFixed(2).replace(".",",")}</div>
-    </div>
+function aviso(texto){
+ document.getElementById("mensagem").textContent=texto;
+}
+
+function tela(id){
+ ["acesso","areaCliente","areaAdmin"].forEach(x=>
+  document.getElementById(x).classList.add("hidden")
+ );
+ document.getElementById(id).classList.remove("hidden");
+ document.getElementById("logout").classList.toggle("hidden",id==="acesso");
+}
+
+function limparEscuta(){
+ if(pararAgendamentos) pararAgendamentos();
+ if(pararServicos) pararServicos();
+ pararAgendamentos=null;
+ pararServicos=null;
+}
+
+// 2. CADASTRO E LOGIN DO CLIENTE
+document.getElementById("formCliente").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const nome=document.getElementById("nome").value.trim();
+ const email=document.getElementById("email").value.trim();
+ const senha=document.getElementById("senha").value;
+
+ try{
+  let credencial;
+  try{
+   credencial=await auth.signInWithEmailAndPassword(email,senha);
+  }catch(err){
+   if(err.code==="auth/user-not-found" || err.code==="auth/invalid-credential"){
+    credencial=await auth.createUserWithEmailAndPassword(email,senha);
+   }else throw err;
+  }
+
+  const ref=db.collection("users").doc(credencial.user.uid);
+  const doc=await ref.get();
+
+  if(!doc.exists){
+   await ref.set({
+    nome:nome,
+    email:email,
+    role:"cliente"
+   });
+  }
+  aviso("Acesso realizado!");
+ }catch(err){
+  aviso("Não foi possível entrar: "+err.message);
+ }
+});
+
+// 3. LOGIN ADMINISTRATIVO
+document.getElementById("formAdmin").addEventListener("submit",async e=>{
+ e.preventDefault();
+ const email=document.getElementById("adminEmail").value.trim();
+ const senha=document.getElementById("adminSenha").value;
+
+ try{
+  await auth.signInWithEmailAndPassword(email,senha);
+ }catch(err){
+  aviso("Não foi possível entrar: "+err.message);
+ }
+});
+
+// 4. IDENTIFICAR O USUÁRIO
+auth.onAuthStateChanged(async user=>{
+ limparEscuta();
+ usuario=user;
+ perfil=null;
+
+ if(!user){
+  tela("acesso");
+  return;
+ }
+
+ try{
+  const admin=await db.collection("admins").doc(user.uid).get();
+
+  if(admin.exists){
+   perfil="admin";
+   tela("areaAdmin");
+   carregarAdmin();
+   return;
+  }
+
+  const documento=await db.collection("users").doc(user.uid).get();
+
+  if(!documento.exists || documento.data().role!=="cliente"){
+   await auth.signOut();
+   aviso("Conta sem autorização de acesso.");
+   return;
+  }
+
+  perfil="cliente";
+  const dados=documento.data();
+  document.getElementById("nomeCliente").textContent=dados.nome || "Cliente";
+  tela("areaCliente");
+  carregarServicos();
+  carregarMeusAgendamentos();
+
+ }catch(err){
+  aviso("Erro ao verificar acesso: "+err.message);
+ }
+});
+
+// 5. SERVIÇOS
+function carregarServicos(){
+ pararServicos=db.collection("services").onSnapshot(snapshot=>{
+  servicos=snapshot.docs.map(d=>({id:d.id,...d.data()}));
+
+  if(servicos.length===0){
+   padrao.forEach(async s=>{
+    await db.collection("services").add({
+     nome:s.nome,preco:s.preco,icone:s.icone
+    });
+   });
+   return;
+  }
+
+  const area=document.getElementById("servicos");
+  const select=document.getElementById("servicoEscolhido");
+
+  area.innerHTML=servicos.map(s=>`
+   <div class="service">
+    <div style="font-size:28px">${s.icone || "✨"}</div>
+    <strong>${esc(s.nome)}</strong>
+    <div class="price">R$ ${Number(s.preco).toFixed(2).replace(".",",")}</div>
+   </div>
   `).join("");
 
-  $("service-select").innerHTML =
-    '<option value="">Selecione um serviço</option>' +
-    services.map(s=>`<option value="${s.id}">${escapeHTML(s.name)} — R$ ${Number(s.price).toFixed(2).replace(".",",")}</option>`).join("");
+  select.innerHTML=servicos.map(s=>
+   `<option value="${s.id}">${esc(s.nome)} - R$ ${Number(s.preco).toFixed(2)}</option>`
+  ).join("");
+
+  if(perfil==="admin") renderListaServicos();
+ });
 }
 
-function renderProfessionals() {
-  $("professional-list").innerHTML = professionals.map(p=>`
-    <div class="professional">
-      <div class="avatar">${p.icon}</div>
-      <h3>${escapeHTML(p.name)}</h3>
-      <p>${escapeHTML(p.role)}</p>
-    </div>
-  `).join("");
+// 6. HORÁRIOS DISPONÍVEIS
+document.getElementById("data").min=new Date().toLocaleDateString("en-CA");
 
-  $("professional-select").innerHTML =
-    '<option value="">Selecione uma profissional</option>' +
-    professionals.map(p=>`<option value="${p.id}">${escapeHTML(p.name)}</option>`).join("");
+async function atualizarHorarios(){
+ const data=document.getElementById("data").value;
+ const profissional=document.getElementById("profissional").value;
+ const select=document.getElementById("horario");
+
+ select.innerHTML='<option value="">Carregando horários...</option>';
+
+ if(!data || !profissional) return;
+
+ try{
+  const snap=await db.collection("appointments")
+   .where("data","==",data)
+   .where("profissional","==",profissional)
+   .get();
+
+  const ocupados=snap.docs
+   .map(d=>d.data())
+   .filter(a=>a.status!=="Cancelado")
+   .map(a=>a.horario);
+
+  const horarios=["08:00","09:00","10:00","11:00","13:00","14:00","15:00","16:00","17:00"];
+
+  select.innerHTML='<option value="">Selecione um horário</option>';
+
+  horarios.forEach(h=>{
+   if(!ocupados.includes(h)){
+    const op=document.createElement("option");
+    op.value=h;
+    op.textContent=h;
+    select.appendChild(op);
+   }
+  });
+
+  if(select.options.length===1){
+   select.innerHTML='<option value="">Não há horários disponíveis</option>';
+  }
+ }catch(err){
+  select.innerHTML='<option value="">Erro ao carregar horários</option>';
+ }
 }
 
-function escapeHTML(value) {
-  return String(value).replace(/[&<>"']/g,c=>({
-    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-  }[c]));
-}
+document.getElementById("data").addEventListener("change",atualizarHorarios);
+document.getElementById("profissional").addEventListener("change",atualizarHorarios);
 
-function localDate(date = new Date()) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth()+1).padStart(2,"0");
-  const day = String(date.getDate()).padStart(2,"0");
-  return `${year}-${month}-${day}`;
-}
+// 7. CRIAR AGENDAMENTO
+document.getElementById("formAgendamento").addEventListener("submit",async e=>{
+ e.preventDefault();
 
-$("booking-date").min = localDate();
-$("booking-date").value = localDate();
+ if(perfil!=="cliente" || !usuario) return;
 
-function renderSlots() {
-  const date = $("booking-date").value;
-  const professionalId = $("professional-select").value;
-  const times = ["08:00","09:00","10:00","11:00","13:00","14:00","15:00","16:00","17:00"];
+ const service=servicos.find(s=>s.id===document.getElementById("servicoEscolhido").value);
+ if(!service) return alert("Selecione um serviço.");
 
-  $("time-slots").innerHTML = "";
-  selectedTime = "";
+ const dados={
+  clienteUid:usuario.uid,
+  clienteEmail:usuario.email,
+  servico:service.nome,
+  preco:Number(service.preco),
+  profissional:document.getElementById("profissional").value,
+  data:document.getElementById("data").value,
+  horario:document.getElementById("horario").value,
+  observacao:document.getElementById("observacao").value,
+  status:"Agendado",
+  criadoEm:firebase.firestore.FieldValue.serverTimestamp()
+ };
 
-  times.forEach(time=>{
-    const occupied = bookings.some(b=>
-      b.date===date &&
-      String(b.professionalId)===String(professionalId) &&
-      b.time===time &&
-      b.status!=="Cancelado"
-    );
+ if(!dados.data || !dados.horario) return alert("Escolha a data e o horário.");
+ if(dados.data<new Date().toLocaleDateString("en-CA")) return alert("Escolha uma data válida.");
 
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "slot";
-    button.textContent = time;
-    button.disabled = occupied;
-    button.onclick = ()=>{
-      document.querySelectorAll(".slot").forEach(s=>s.classList.remove("selected"));
-      button.classList.add("selected");
-      selectedTime = time;
-    };
-    $("time-slots").appendChild(button);
+ try{
+  const repetido=await db.collection("appointments")
+   .where("data","==",dados.data)
+   .where("profissional","==",dados.profissional)
+   .where("horario","==",dados.horario)
+   .get();
+
+  const ocupado=repetido.docs.some(d=>d.data().status!=="Cancelado");
+  if(ocupado) return alert("Este horário já foi reservado. Escolha outro.");
+
+  await db.collection("appointments").add(dados);
+  document.getElementById("resultado").textContent="Agendamento realizado com sucesso! 💗";
+  document.getElementById("formAgendamento").reset();
+  document.getElementById("horario").innerHTML='<option value="">Escolha uma data primeiro</option>';
+ }catch(err){
+  alert("Erro ao agendar: "+err.message);
+ }
+});
+
+// 8. CLIENTE VÊ SOMENTE SEUS AGENDAMENTOS
+function carregarMeusAgendamentos(){
+ pararAgendamentos=db.collection("appointments")
+  .where("clienteUid","==",usuario.uid)
+  .onSnapshot(snapshot=>{
+   const area=document.getElementById("meusAgendamentos");
+
+   if(snapshot.empty){
+    area.innerHTML="<p>Você ainda não possui agendamentos.</p>";
+    return;
+   }
+
+   area.innerHTML=snapshot.docs.map(d=>{
+    const a=d.data();
+    return `
+     <div class="item">
+      <strong>${esc(a.servico)}</strong><br>
+      Profissional: ${esc(a.profissional)}<br>
+      Data: ${esc(a.data)} às ${esc(a.horario)}<br>
+      Situação: ${esc(a.status)}
+      ${a.status==="Agendado" ? `<br><button onclick="cancelarMeu('${d.id}')">Cancelar horário</button>` : ""}
+     </div>`;
+   }).join("");
   });
 }
 
-$("booking-date").addEventListener("change",renderSlots);
-$("professional-select").addEventListener("change",renderSlots);
+async function cancelarMeu(id){
+ if(!confirm("Deseja cancelar seu horário?")) return;
+ try{
+  const ref=db.collection("appointments").doc(id);
+  const doc=await ref.get();
+  if(!doc.exists || doc.data().clienteUid!==usuario.uid) return alert("Agendamento não encontrado.");
+  await ref.update({status:"Cancelado"});
+ }catch(err){alert("Erro ao cancelar: "+err.message)}
+}
 
-$("booking-form").addEventListener("submit",function(e){
-  e.preventDefault();
+// 9. PAINEL DO ADMINISTRADOR
+function carregarAdmin(){
+ pararAgendamentos=db.collection("appointments").onSnapshot(snapshot=>{
+  const docs=snapshot.docs;
+  document.getElementById("total").textContent=docs.length;
+  document.getElementById("pendentes").textContent=docs.filter(d=>d.data().status==="Agendado").length;
+  document.getElementById("concluidos").textContent=docs.filter(d=>d.data().status==="Concluído").length;
 
-  const name = $("client-name").value.trim();
-  const phone = $("client-phone").value.trim();
-  const serviceId = $("service-select").value;
-  const professionalId = $("professional-select").value;
-  const date = $("booking-date").value;
+  document.getElementById("todosAgendamentos").innerHTML=docs.length?docs.map(d=>{
+   const a=d.data();
+   return `
+    <div class="item">
+     <strong>${esc(a.servico)}</strong><br>
+     Cliente: ${esc(a.clienteEmail)}<br>
+     Profissional: ${esc(a.profissional)}<br>
+     Data: ${esc(a.data)} às ${esc(a.horario)}<br>
+     Situação: ${esc(a.status)}<br>
+     ${a.status==="Agendado" ? `
+      <button onclick="alterarStatus('${d.id}','Concluído')">Concluir</button>
+      <button onclick="alterarStatus('${d.id}','Cancelado')">Cancelar</button>`:""}
+    </div>`;
+  }).join(""):"<p>Nenhum agendamento registrado.</p>";
+ });
+ carregarServicos();
+}
 
-  if(!selectedTime) return showMessage("Escolha um horário disponível.","error");
+async function alterarStatus(id,status){
+ try{
+  await db.collection("appointments").doc(id).update({status});
+ }catch(err){alert("Erro: "+err.message)}
+}
 
-  if(!serviceId || !professionalId) return showMessage("Selecione o serviço e a profissional.","error");
+// 10. CADASTRAR SERVIÇOS
+document.getElementById("formNovoServico").addEventListener("submit",async e=>{
+ e.preventDefault();
+ if(perfil!=="admin") return;
 
-  if(date < localDate()) return showMessage("Escolha uma data válida.","error");
-
-  const conflict = bookings.some(b=>
-    b.date===date &&
-    String(b.professionalId)===String(professionalId) &&
-    b.time===selectedTime &&
-    b.status!=="Cancelado"
-  );
-
-  if(conflict) return showMessage("Este horário acabou de ser reservado. Escolha outro.","error");
-
-  const service = services.find(s=>s.id==serviceId);
-  const professional = professionals.find(p=>p.id==professionalId);
-
-  const appointment = {
-    id:Date.now(),
-    name,phone,serviceId:Number(serviceId),
-    service:service.name,
-    professionalId:Number(professionalId),
-    professional:professional.name,
-    date,time:selectedTime,
-    notes:$("notes").value.trim(),
-    status:"Agendado"
-  };
-
-  bookings.push(appointment);
-  saveData();
-
-  showMessage("Agendamento registrado! Envie a confirmação pelo WhatsApp.","success");
-
-  const message = `Olá! Meu nome é ${name}. Gostaria de confirmar meu agendamento:\\nServiço: ${service.name}\\nProfissional: ${professional.name}\\nData: ${date}\\nHorário: ${selectedTime}`;
-
-  const whatsapp = phone.replace(/\D/g,"");
-  const whatsappURL = "https://wa.me/55"+whatsapp+"?text="+encodeURIComponent(message);
-
-  const link = document.createElement("a");
-  link.href = whatsappURL;
-  link.target = "_blank";
-  link.rel = "noopener";
-  link.textContent = "Abrir WhatsApp para enviar mensagem";
-  link.style.cssText = "display:block;margin-top:10px;color:#ffb1d0;font-weight:bold";
-  $("message").appendChild(link);
-
-  this.reset();
-  $("booking-date").value = localDate();
-  selectedTime = "";
-  renderSlots();
-  if(adminActive) renderAdmin();
+ try{
+  await db.collection("services").add({
+   nome:document.getElementById("novoNome").value.trim(),
+   preco:Number(document.getElementById("novoPreco").value),
+   icone:"✨"
+  });
+  e.target.reset();
+  alert("Serviço cadastrado!");
+ }catch(err){alert("Erro: "+err.message)}
 });
 
-function showMessage(text,type) {
-  const box = $("message");
-  box.style.display = "block";
-  box.className = type;
-  box.textContent = text;
+function renderListaServicos(){
+ document.getElementById("listaAdminServicos").innerHTML=servicos.map(s=>`
+  <div class="item">
+   ${esc(s.nome)} — R$ ${Number(s.preco).toFixed(2)}
+   <button onclick="excluirServico('${s.id}')">Excluir</button>
+  </div>
+ `).join("");
 }
 
-function findBookings() {
-  const phone = $("search-phone").value.replace(/\D/g,"");
-  if(!phone) return alert("Informe seu WhatsApp.");
-
-  const found = bookings.filter(b=>b.phone.replace(/\D/g,"")===phone);
-  const area = $("my-bookings-list");
-
-  if(!found.length) {
-    area.innerHTML = '<p style="color:#b9a9c3;font-size:13px;margin-top:15px">Nenhum agendamento encontrado para esse número.</p>';
-    return;
-  }
-
-  area.innerHTML = found.map(b=>`
-    <div class="booking-item">
-      <strong>${escapeHTML(b.service)}</strong><br>
-      Profissional: ${escapeHTML(b.professional)}<br>
-      Data: ${escapeHTML(b.date)} às ${escapeHTML(b.time)}<br>
-      Situação: ${escapeHTML(b.status)}
-      ${b.status!=="Cancelado" ? `<br><button onclick="cancelBooking(${b.id})">Cancelar agendamento</button>` : ""}
-    </div>
-  `).join("");
+async function excluirServico(id){
+ if(!confirm("Excluir este serviço?")) return;
+ await db.collection("services").doc(id).delete();
 }
 
-function cancelBooking(id) {
-  if(!confirm("Deseja cancelar este agendamento?")) return;
-  const b = bookings.find(item=>item.id===id);
-  if(b) b.status="Cancelado";
-  saveData();
-  findBookings();
-  if(adminActive) renderAdmin();
+function esc(v){
+ return String(v??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+ }[c]));
 }
 
-function adminLogin() {
-  if(adminActive) {
-    $("admin-panel").scrollIntoView({behavior:"smooth"});
-    return;
-  }
-
-  const password = prompt("Digite a senha administrativa:");
-  if(password==="admin123") {
-    adminActive=true;
-    $("admin-panel").style.display="block";
-    renderAdmin();
-    $("admin-panel").scrollIntoView({behavior:"smooth"});
-  } else if(password!==null) {
-    alert("Senha incorreta.");
-  }
+// 11. SAIR DA CONTA
+async function sair(){
+ limparEscuta();
+ await auth.signOut();
 }
-
-function adminLogout() {
-  adminActive=false;
-  $("admin-panel").style.display="none";
-}
-
-function renderAdmin() {
-  if(!adminActive) return;
-
-  const today = localDate();
-  $("total-bookings").textContent = bookings.length;
-  $("today-bookings").textContent = bookings.filter(b=>b.date===today && b.status!=="Cancelado").length;
-  $("total-services").textContent = services.length;
-
-  $("admin-bookings").innerHTML = bookings.length ? bookings.slice().reverse().map(b=>`
-    <div class="booking-item">
-      <strong>${escapeHTML(b.name)}</strong><br>
-      WhatsApp: ${escapeHTML(b.phone)}<br>
-      ${escapeHTML(b.service)} — ${escapeHTML(b.professional)}<br>
-      ${escapeHTML(b.date)} às ${escapeHTML(b.time)}<br>
-      Situação: ${escapeHTML(b.status)}
-      ${b.status!=="Cancelado" ? `<br><button onclick="adminCancel(${b.id})">Cancelar</button><button onclick="completeBooking(${b.id})">Concluir</button>` : ""}
-    </div>
-  `).join("") : "<p>Nenhum agendamento registrado.</p>";
-}
-
-function adminCancel(id) {
-  const b=bookings.find(x=>x.id===id);
-  if(b) b.status="Cancelado";
-  saveData();
-  renderAdmin();
-}
-
-function completeBooking(id) {
-  const b=bookings.find(x=>x.id===id);
-  if(b) b.status="Concluído";
-  saveData();
-  renderAdmin();
-}
-
-function addService() {
-  const name=prompt("Nome do novo serviço:");
-  if(!name) return;
-  const price=Number(prompt("Preço do serviço (somente números):"));
-  if(!Number.isFinite(price) || price<0) return alert("Preço inválido.");
-  const desc=prompt("Descrição do serviço:") || "Atendimento especial.";
-  services.push({id:Date.now(),name,desc,price,icon:"✨"});
-  saveData();
-  renderServices();
-  renderAdmin();
-}
-
-function addProfessional() {
-  const name=prompt("Nome da profissional:");
-  if(!name) return;
-  const role=prompt("Especialidade:") || "Profissional de beleza";
-  professionals.push({id:Date.now(),name,role,icon:"👩🏻"});
-  saveData();
-  renderProfessionals();
-  renderSlots();
-  alert("Profissional adicionada!");
-}
-
-function exportBookings() {
-  const content = [
-    ["Cliente","WhatsApp","Serviço","Profissional","Data","Horário","Situação"],
-    ...bookings.map(b=>[b.name,b.phone,b.service,b.professional,b.date,b.time,b.status])
-  ];
-  const csv = content.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(";")).join("\n");
-  const blob = new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href=url;
-  a.download="agendamentos-bella-beauty.csv";
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-renderServices();
-renderProfessionals();
-renderSlots();
 </script>
-
 </body>
 </html>
