@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -179,24 +180,65 @@ footer {
 
 <main>
 
-<!-- CLIENTE / AGENDAMENTO DIRETO -->
-<section id="areaCliente" class="panel">
-  <h2>Faça seu agendamento</h2>
-  <p class="small">Preencha seus dados, escolha o serviço e acompanhe seus horários.</p>
+<!-- LOGIN -->
+<section id="acesso" class="panel">
+  <h2>Bem-vinda ao Bella Beauty</h2>
+  <p class="small">Entre na sua conta para agendar e conversar com o salão.</p>
 
-  <div class="panel" style="background:#1b1420; margin-top:15px;">
-    <h3>Seus dados</h3>
-    <label>Seu Nome</label>
-    <input id="nomeCliente" placeholder="Digite seu nome completo">
+  <div class="grid">
 
-    <label>Seu E-mail</label>
-    <input id="emailCliente" type="email" placeholder="seu@email.com">
-    <button class="sec" style="margin-top:10px;" onclick="salvarDadosCliente()">Salvar meus dados</button>
+    <!-- CLIENTE -->
+    <div>
+      <h3>Área do cliente</h3>
+
+      <form id="formCliente">
+        <label>Nome (para criar conta)</label>
+        <input id="nomeCliente" placeholder="Seu nome">
+
+        <label>E-mail</label>
+        <input id="emailCliente" type="email" required placeholder="seu@email.com">
+
+        <label>Senha</label>
+        <input id="senhaCliente" type="password" required minlength="6" placeholder="Mínimo 6 caracteres">
+
+        <button type="submit">Entrar</button>
+        <button type="button" class="gold" onclick="criarContaCliente()">Criar minha conta</button>
+      </form>
+    </div>
+
+    <!-- ADMINISTRADOR: SOMENTE SENHA -->
+    <div>
+      <h3>Área administrativa</h3>
+
+      <form id="formAdmin">
+        <label>Senha de administrador</label>
+        <input id="senhaAdmin" type="password" required placeholder="Digite sua senha">
+
+        <button type="submit" class="gold">Entrar</button>
+      </form>
+
+      <p class="small">Acesso exclusivo da administração.</p>
+    </div>
+
   </div>
 
-  <div class="panel" style="margin-top:15px;">
-    <h2>Novo Agendamento</h2>
+  <p id="mensagemAcesso" class="notice hidden"></p>
+</section>
+
+<!-- CLIENTE -->
+<section id="areaCliente" class="hidden">
+
+  <div class="panel">
+    <h2>Olá, <span id="saudacaoCliente"></span>!</h2>
+    <p class="small">Faça seu agendamento e acompanhe seus horários.</p>
+    <button class="sec" onclick="sair()">Sair da conta</button>
+  </div>
+
+  <div class="panel">
+    <h2>Agendar horário</h2>
+
     <form id="formAgendamento">
+
       <label>Escolha o serviço</label>
       <select id="servicoEscolhido" required></select>
 
@@ -218,12 +260,13 @@ footer {
 
       <button type="submit">Confirmar agendamento</button>
     </form>
+
     <p id="mensagemAgendamento" class="small"></p>
   </div>
 
   <div class="panel">
     <h2>Meus agendamentos</h2>
-    <div id="meusAgendamentos">Informe seu e-mail acima para ver seus agendamentos.</div>
+    <div id="meusAgendamentos">Carregando...</div>
   </div>
 
   <div id="chatClientePainel" class="panel hidden">
@@ -241,6 +284,55 @@ footer {
 
     <button class="sec" onclick="fecharChat()">Fechar conversa</button>
   </div>
+
+</section>
+
+<!-- ADMINISTRADOR -->
+<section id="areaAdmin" class="hidden">
+
+  <div class="panel">
+    <h2>Área administrativa</h2>
+    <p class="small">Gerencie os agendamentos, profissionais e conversas.</p>
+    <button class="sec" onclick="sair()">Sair da administração</button>
+  </div>
+
+  <div class="panel">
+    <h2>Agendamentos</h2>
+    <div id="todosAgendamentos">Carregando agendamentos...</div>
+  </div>
+
+  <div class="panel">
+    <h2>Adicionar cabeleireiro</h2>
+
+    <form id="formCabeleireiro">
+      <label>Nome do profissional</label>
+      <input id="nomeCabeleireiro" required placeholder="Nome do cabeleireiro">
+
+      <label>Especialidade</label>
+      <input id="especialidadeCabeleireiro" placeholder="Ex.: corte, coloração, manicure">
+
+      <button type="submit">Adicionar profissional</button>
+    </form>
+
+    <div id="listaCabeleireiros"></div>
+  </div>
+
+  <div id="chatAdminPainel" class="panel hidden">
+    <h2>Chat com cliente</h2>
+    <p id="chatAdminTitulo" class="small"></p>
+
+    <div class="chatBox">
+      <div id="chatMessagesAdmin" class="chatMessages"></div>
+
+      <form id="formChatAdmin" class="chatForm">
+        <input id="mensagemAdmin" maxlength="1000" placeholder="Digite sua resposta..." required>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <button class="sec" onclick="fecharChat()">Fechar conversa</button>
+  </div>
+
 </section>
 
 </main>
@@ -249,12 +341,14 @@ footer {
 
 <!-- FIREBASE -->
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
 
 // ==================================================
 // 1. CONFIGURAÇÃO FIREBASE
+// COLOQUE AQUI OS DADOS DO SEU PROJETO
 // ==================================================
 
 const firebaseConfig = {
@@ -265,13 +359,26 @@ const firebaseConfig = {
   messagingSenderId: "890963580965",
   appId: "1:890963580965:web:16644d6d161c476543c7cc",
   measurementId: "G-PDGGQDB2DX"
-};
+
+// ==================================================
+// 2. ACESSO ADMINISTRATIVO
+// Use o mesmo e-mail cadastrado no Firebase Authentication.
+// Ele não aparece na tela de login.
+// ==================================================
+
+const ADMIN_EMAIL = "admin@bellabeauty.com";
+
+// ==================================================
+// 3. INICIALIZAÇÃO
+// ==================================================
 
 firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
 const db = firebase.firestore();
 
 // ==================================================
-// 2. SERVIÇOS E PREÇOS
+// 4. SERVIÇOS E PREÇOS
 // ==================================================
 
 const SERVICOS = [
@@ -288,14 +395,18 @@ const HORARIOS = [
   "13:00","14:00","15:00","16:00","17:00"
 ];
 
+let usuario = null;
+let perfil = null;
+let nomeLogado = "";
 let escutaAgendamentos = null;
 let escutaProfissionais = null;
 let escutaMensagens = null;
 let agendamentoChatAtual = null;
 let chatOrigem = null;
+let criandoConta = false;
 
 // ==================================================
-// 3. FUNÇÕES AUXILIARES
+// 5. FUNÇÕES AUXILIARES
 // ==================================================
 
 function el(id) {
@@ -332,6 +443,13 @@ function formatarData(data) {
   return `${partes[2]}/${partes[1]}/${partes[0]}`;
 }
 
+function mostrarApenas(id) {
+  ["acesso","areaCliente","areaAdmin"].forEach(item => {
+    el(item).classList.add("hidden");
+  });
+  el(id).classList.remove("hidden");
+}
+
 function limparEscutas() {
   if (escutaAgendamentos) escutaAgendamentos();
   if (escutaProfissionais) escutaProfissionais();
@@ -366,37 +484,7 @@ function classeStatus(status) {
 }
 
 // ==================================================
-// 4. PERSISTÊNCIA LOCAL DOS DADOS DO CLIENTE
-// ==================================================
-
-function salvarDadosCliente() {
-  const nome = el("nomeCliente").value.trim();
-  const email = el("emailCliente").value.trim();
-
-  if(!nome || !email) {
-    alert("Preencha seu nome e e-mail.");
-    return;
-  }
-
-  localStorage.setItem("bella_nome", nome);
-  localStorage.setItem("bella_email", email);
-  alert("Dados salvos com sucesso!");
-  carregarMeusAgendamentos();
-}
-
-function carregarDadosSalvos() {
-  const nomeSalvo = localStorage.getItem("bella_nome");
-  const emailSalvo = localStorage.getItem("bella_email");
-
-  if(nomeSalvo) el("nomeCliente").value = nomeSalvo;
-  if(emailSalvo) {
-    el("emailCliente").value = emailSalvo;
-    carregarMeusAgendamentos();
-  }
-}
-
-// ==================================================
-// 5. CARREGAR SERVIÇOS E PROFISSIONAIS
+// 6. CARREGAR SERVIÇOS
 // ==================================================
 
 function carregarServicos() {
@@ -405,13 +493,19 @@ function carregarServicos() {
   ).join("");
 }
 
+// ==================================================
+// 7. CABELEIREIROS
+// ==================================================
+
 function carregarProfissionais() {
   if (escutaProfissionais) escutaProfissionais();
 
   escutaProfissionais = db.collection("hairdressers")
     .where("ativo","==",true)
     .onSnapshot(snapshot => {
+
       const lista = [];
+
       snapshot.forEach(doc => {
         lista.push({id:doc.id,...doc.data()});
       });
@@ -421,11 +515,97 @@ function carregarProfissionais() {
         lista.map(p =>
           `<option value="${escapar(p.nome)}">${escapar(p.nome)}${p.especialidade ? " — "+escapar(p.especialidade) : ""}</option>`
         ).join("");
+
+      if (perfil === "admin") {
+        carregarListaAdminProfissionais();
+      }
+
     },erro => console.error(erro));
 }
 
+async function carregarListaAdminProfissionais() {
+  const snapshot = await db.collection("hairdressers").get();
+
+  if (perfil !== "admin") return;
+
+  if (snapshot.empty) {
+    el("listaCabeleireiros").innerHTML =
+      '<p class="small">Nenhum profissional cadastrado.</p>';
+    return;
+  }
+
+  el("listaCabeleireiros").innerHTML = snapshot.docs.map(doc => {
+    const p = doc.data();
+
+    return `
+      <div class="item">
+        <strong>${escapar(p.nome)}</strong><br>
+        <span class="small">${escapar(p.especialidade || "Sem especialidade")}</span><br>
+        <span class="status">${p.ativo ? "Ativo" : "Desativado"}</span>
+
+        <div class="actions">
+          <button class="sec" onclick="alternarProfissional('${doc.id}',${!p.ativo})">
+            ${p.ativo ? "Desativar" : "Ativar"}
+          </button>
+
+          <button class="danger" onclick="removerProfissional('${doc.id}')">
+            Excluir
+          </button>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+el("formCabeleireiro").addEventListener("submit",async e => {
+  e.preventDefault();
+
+  if (perfil !== "admin") return;
+
+  const nome = el("nomeCabeleireiro").value.trim();
+  const especialidade = el("especialidadeCabeleireiro").value.trim();
+
+  if (!nome) return;
+
+  try {
+    await db.collection("hairdressers").add({
+      nome,
+      especialidade,
+      ativo:true,
+      criadoEm:firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    el("formCabeleireiro").reset();
+    alert("Cabeleireiro adicionado com sucesso!");
+
+  } catch(erro) {
+    alert("Não foi possível adicionar: " + erro.message);
+  }
+});
+
+async function alternarProfissional(id,ativo) {
+  if (perfil !== "admin") return;
+
+  try {
+    await db.collection("hairdressers").doc(id).update({ativo});
+  } catch(erro) {
+    alert("Erro: " + erro.message);
+  }
+}
+
+async function removerProfissional(id) {
+  if (perfil !== "admin") return;
+  if (!confirm("Deseja excluir este profissional?")) return;
+
+  try {
+    await db.collection("hairdressers").doc(id).delete();
+  } catch(erro) {
+    alert("Erro: " + erro.message);
+  }
+}
+
 // ==================================================
-// 6. HORÁRIOS DISPONÍVEIS
+// 8. HORÁRIOS DISPONÍVEIS
 // ==================================================
 
 async function atualizarHorarios() {
@@ -468,19 +648,13 @@ el("data").addEventListener("change",atualizarHorarios);
 el("data").min = dataLocal();
 
 // ==================================================
-// 7. CRIAR AGENDAMENTO
+// 9. CRIAR AGENDAMENTO
 // ==================================================
 
 el("formAgendamento").addEventListener("submit",async e => {
   e.preventDefault();
 
-  const nome = el("nomeCliente").value.trim();
-  const email = el("emailCliente").value.trim();
-
-  if (!nome || !email) {
-    alert("Por favor, preencha seu nome e e-mail na seção 'Seus dados' acima antes de agendar.");
-    return;
-  }
+  if (!usuario || perfil !== "cliente") return;
 
   const servicoIndex = Number(el("servicoEscolhido").value);
   const servico = SERVICOS[servicoIndex];
@@ -490,7 +664,7 @@ el("formAgendamento").addEventListener("submit",async e => {
   const observacao = el("observacao").value.trim();
 
   if (!servico || !profissional || !data || !horario) {
-    alert("Preencha todos os campos obrigatórios do agendamento.");
+    alert("Preencha todos os campos obrigatórios.");
     return;
   }
 
@@ -502,10 +676,10 @@ el("formAgendamento").addEventListener("submit",async e => {
   const slotId = idHorario(profissional,data,horario);
   const slotRef = db.collection("bookedSlots").doc(slotId);
   const agendamentoRef = db.collection("appointments").doc();
-  const clienteUid = email.replace(/[^a-zA-Z0-9]/g, "_"); // Identificador único baseado no email
 
   try {
     await db.runTransaction(async transaction => {
+
       const slot = await transaction.get(slotRef);
 
       if (slot.exists) {
@@ -513,32 +687,33 @@ el("formAgendamento").addEventListener("submit",async e => {
       }
 
       transaction.set(slotRef,{
-        ownerUid: clienteUid,
+        ownerUid:usuario.uid,
         data,
         profissional,
         horario
       });
 
       transaction.set(agendamentoRef,{
-        clienteUid: clienteUid,
-        clienteEmail: email,
-        clienteNome: nome,
-        servico: servico.nome,
-        preco: servico.preco,
+        clienteUid:usuario.uid,
+        clienteEmail:usuario.email,
+        clienteNome:nomeLogado,
+        servico:servico.nome,
+        preco:servico.preco,
         profissional,
         data,
         horario,
         observacao,
-        status: "Agendado",
+        status:"Agendado",
         slotId,
-        criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+        criadoEm:firebase.firestore.FieldValue.serverTimestamp()
       });
+
     });
 
     el("formAgendamento").reset();
     el("data").min = dataLocal();
+
     mostrarMensagem("mensagemAgendamento","Agendamento realizado com sucesso!");
-    carregarMeusAgendamentos();
 
   } catch(erro) {
     alert(erro.message || "Não foi possível realizar o agendamento.");
@@ -546,24 +721,19 @@ el("formAgendamento").addEventListener("submit",async e => {
 });
 
 // ==================================================
-// 8. AGENDAMENTOS DO CLIENTE
+// 10. AGENDAMENTOS DO CLIENTE
 // ==================================================
 
 function carregarMeusAgendamentos() {
-  const email = el("emailCliente").value.trim();
-  if (!email) return;
-
-  const clienteUid = email.replace(/[^a-zA-Z0-9]/g, "_");
-
   if (escutaAgendamentos) escutaAgendamentos();
 
   escutaAgendamentos = db.collection("appointments")
-    .where("clienteUid","==", clienteUid)
+    .where("clienteUid","==",usuario.uid)
     .onSnapshot(snapshot => {
 
       if (snapshot.empty) {
         el("meusAgendamentos").innerHTML =
-          '<p class="small">Você ainda não possui agendamentos com este e-mail.</p>';
+          '<p class="small">Você ainda não possui agendamentos.</p>';
         return;
       }
 
@@ -584,7 +754,7 @@ function carregarMeusAgendamentos() {
             Valor: R$ ${Number(a.preco || 0).toFixed(2).replace(".",",")}
           </p>
 
-          <button onclick="abrirChat('${a.id}')">
+          <button onclick="abrirChat('${a.id}','cliente')">
             Conversar com o salão
           </button>
 
@@ -608,7 +778,7 @@ async function cancelarMeuAgendamento(id) {
     await db.runTransaction(async transaction => {
       const snap = await transaction.get(ref);
 
-      if (!snap.exists) {
+      if (!snap.exists || snap.data().clienteUid !== usuario.uid) {
         throw new Error("Agendamento não encontrado.");
       }
 
@@ -629,19 +799,115 @@ async function cancelarMeuAgendamento(id) {
 }
 
 // ==================================================
-// 9. CHAT
+// 11. AGENDAMENTOS DO ADMINISTRADOR
 // ==================================================
 
-function abrirChat(agendamentoId) {
+function carregarTodosAgendamentos() {
+  if (escutaAgendamentos) escutaAgendamentos();
+
+  escutaAgendamentos = db.collection("appointments")
+    .onSnapshot(snapshot => {
+
+      if (perfil !== "admin") return;
+
+      if (snapshot.empty) {
+        el("todosAgendamentos").innerHTML =
+          '<p class="small">Ainda não existem agendamentos.</p>';
+        return;
+      }
+
+      const lista = snapshot.docs.map(doc => ({
+        id:doc.id,...doc.data()
+      }));
+
+      lista.sort((a,b) => {
+        const d = (a.data || "").localeCompare(b.data || "");
+        return d || (a.horario || "").localeCompare(b.horario || "");
+      });
+
+      el("todosAgendamentos").innerHTML = lista.map(a => `
+        <div class="item">
+          <strong>${escapar(a.clienteNome || a.clienteEmail || "Cliente")}</strong>
+
+          <span class="status ${classeStatus(a.status)}">${escapar(a.status)}</span>
+
+          <p class="small">
+            Serviço: ${escapar(a.servico)}<br>
+            Profissional: ${escapar(a.profissional)}<br>
+            Data: ${formatarData(a.data)} às ${escapar(a.horario)}<br>
+            Valor: R$ ${Number(a.preco || 0).toFixed(2).replace(".",",")}<br>
+            E-mail: ${escapar(a.clienteEmail || "")}<br>
+            Observação: ${escapar(a.observacao || "Nenhuma")}
+          </p>
+
+          <div class="actions">
+            <button class="green" onclick="alterarStatus('${a.id}','Confirmado')">Confirmar</button>
+            <button class="gold" onclick="alterarStatus('${a.id}','Concluído')">Concluir</button>
+
+            ${a.status !== "Cancelado" ?
+              `<button class="danger" onclick="alterarStatus('${a.id}','Cancelado')">Cancelar</button>` : ""}
+
+            <button onclick="abrirChat('${a.id}','admin')">Chat com cliente</button>
+          </div>
+        </div>
+      `).join("");
+
+    },erro => {
+      console.error(erro);
+      el("todosAgendamentos").textContent = "Erro ao carregar agendamentos.";
+    });
+}
+
+async function alterarStatus(id,status) {
+  if (perfil !== "admin") return;
+
+  try {
+    const ref = db.collection("appointments").doc(id);
+
+    await db.runTransaction(async transaction => {
+      const snap = await transaction.get(ref);
+
+      if (!snap.exists) {
+        throw new Error("Agendamento não encontrado.");
+      }
+
+      transaction.update(ref,{status});
+
+      if (status === "Cancelado" && snap.data().slotId) {
+        transaction.delete(
+          db.collection("bookedSlots").doc(snap.data().slotId)
+        );
+      }
+    });
+
+  } catch(erro) {
+    alert("Erro ao atualizar: " + erro.message);
+  }
+}
+
+// ==================================================
+// 12. CHAT PRIVADO
+// ==================================================
+
+function abrirChat(agendamentoId,origem) {
+  if (!usuario) return;
+
   fecharEscutaChat();
+
   agendamentoChatAtual = agendamentoId;
+  chatOrigem = origem;
 
-  el("chatClientePainel").classList.remove("hidden");
-  el("chatClienteTitulo").textContent = "Conversa vinculada ao seu agendamento.";
-  el("chatMessages").innerHTML = "";
-
-  const email = el("emailCliente").value.trim();
-  const meuUid = email.replace(/[^a-zA-Z0-9]/g, "_");
+  if (origem === "admin") {
+    el("chatAdminPainel").classList.remove("hidden");
+    el("chatAdminTitulo").textContent =
+      "Conversa vinculada ao agendamento.";
+    el("chatMessagesAdmin").innerHTML = "";
+  } else {
+    el("chatClientePainel").classList.remove("hidden");
+    el("chatClienteTitulo").textContent =
+      "Conversa vinculada ao seu agendamento.";
+    el("chatMessages").innerHTML = "";
+  }
 
   const mensagensRef = db.collection("appointments")
     .doc(agendamentoId)
@@ -649,13 +915,19 @@ function abrirChat(agendamentoId) {
     .orderBy("criadoEm","asc");
 
   escutaMensagens = mensagensRef.onSnapshot(snapshot => {
-    const area = el("chatMessages");
+
+    const destino = origem === "admin"
+      ? "chatMessagesAdmin"
+      : "chatMessages";
+
+    const area = el(destino);
 
     area.innerHTML = snapshot.docs.map(doc => {
       const m = doc.data();
-      const minha = m.senderUid === meuUid;
+      const minha = m.senderUid === usuario.uid;
 
       let hora = "";
+
       if (m.criadoEm && m.criadoEm.toDate) {
         hora = m.criadoEm.toDate().toLocaleString("pt-BR");
       }
@@ -679,21 +951,22 @@ function abrirChat(agendamentoId) {
 
 function fecharChat() {
   fecharEscutaChat();
+
   agendamentoChatAtual = null;
+  chatOrigem = null;
+
   el("chatClientePainel").classList.add("hidden");
+  el("chatAdminPainel").classList.add("hidden");
 }
 
-el("formChatCliente").addEventListener("submit",async e => {
-  e.preventDefault();
-  if (!agendamentoChatAtual) return;
+async function enviarMensagem(campoId) {
+  if (!usuario || !agendamentoChatAtual) return;
 
-  const campo = el("mensagemCliente");
+  const campo = el(campoId);
   const texto = campo.value.trim();
-  const nome = el("nomeCliente").value.trim() || "Cliente";
-  const email = el("emailCliente").value.trim();
-  const meuUid = email.replace(/[^a-zA-Z0-9]/g, "_");
 
   if (!texto) return;
+
   campo.value = "";
 
   try {
@@ -702,23 +975,195 @@ el("formChatCliente").addEventListener("submit",async e => {
       .collection("messages")
       .add({
         texto,
-        senderUid: meuUid,
-        senderNome: nome,
-        senderRole: "cliente",
-        criadoEm: firebase.firestore.FieldValue.serverTimestamp()
+        senderUid:usuario.uid,
+        senderNome:nomeLogado || "Usuário",
+        senderRole:perfil,
+        criadoEm:firebase.firestore.FieldValue.serverTimestamp()
       });
+
   } catch(erro) {
     campo.value = texto;
     alert("Não foi possível enviar: " + erro.message);
   }
+}
+
+el("formChatCliente").addEventListener("submit",e => {
+  e.preventDefault();
+
+  if (chatOrigem === "cliente") {
+    enviarMensagem("mensagemCliente");
+  }
 });
 
-// Inicialização das funções ao carregar a página
-window.onload = () => {
+el("formChatAdmin").addEventListener("submit",e => {
+  e.preventDefault();
+
+  if (chatOrigem === "admin") {
+    enviarMensagem("mensagemAdmin");
+  }
+});
+
+// ==================================================
+// 13. ENTRAR COMO CLIENTE
+// ==================================================
+
+el("formCliente").addEventListener("submit",async e => {
+  e.preventDefault();
+
+  const email = el("emailCliente").value.trim();
+  const senha = el("senhaCliente").value;
+
+  try {
+    await auth.signInWithEmailAndPassword(email,senha);
+  } catch(erro) {
+    mostrarMensagem(
+      "mensagemAcesso",
+      "Não foi possível entrar. Confira seu e-mail e senha. Se ainda não tem conta, use Criar minha conta."
+    );
+  }
+});
+
+// ==================================================
+// 14. CRIAR CONTA DO CLIENTE
+// ==================================================
+
+async function criarContaCliente() {
+  const nome = el("nomeCliente").value.trim();
+  const email = el("emailCliente").value.trim();
+  const senha = el("senhaCliente").value;
+
+  if (!nome || !email || senha.length < 6) {
+    alert("Informe seu nome, e-mail e uma senha com pelo menos 6 caracteres.");
+    return;
+  }
+
+  try {
+    criandoConta = true;
+
+    const credencial = await auth.createUserWithEmailAndPassword(email,senha);
+
+    await db.collection("users").doc(credencial.user.uid).set({
+      nome,
+      email,
+      role:"cliente",
+      criadoEm:firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    criandoConta = false;
+    await iniciarSessao(credencial.user);
+
+  } catch(erro) {
+    criandoConta = false;
+    alert("Não foi possível criar a conta: " + erro.message);
+  }
+}
+
+// ==================================================
+// 15. ENTRAR COMO ADMINISTRADOR
+// O e-mail é fixo e não aparece na tela.
+// ==================================================
+
+el("formAdmin").addEventListener("submit",async e => {
+  e.preventDefault();
+
+  const senha = el("senhaAdmin").value;
+
+  try {
+    await auth.signInWithEmailAndPassword(ADMIN_EMAIL,senha);
+    el("senhaAdmin").value = "";
+
+  } catch(erro) {
+    mostrarMensagem(
+      "mensagemAcesso",
+      "Senha incorreta ou acesso administrativo não autorizado."
+    );
+  }
+});
+
+// ==================================================
+// 16. ABRIR ÁREA CONFORME O PERFIL
+// ==================================================
+
+async function iniciarSessao(user) {
+  if (!user) return;
+
+  limparEscutas();
+  fecharChat();
+
+  usuario = user;
+  perfil = null;
+  nomeLogado = "";
+
+  const adminDoc = await db.collection("admins")
+    .doc(user.uid).get();
+
+  if (adminDoc.exists) {
+    perfil = "admin";
+    nomeLogado = adminDoc.data().nome || "Administração";
+
+    mostrarApenas("areaAdmin");
+    carregarTodosAgendamentos();
+    carregarProfissionais();
+    return;
+  }
+
+  const clienteDoc = await db.collection("users")
+    .doc(user.uid).get();
+
+  if (!clienteDoc.exists || clienteDoc.data().role !== "cliente") {
+    await auth.signOut();
+    mostrarMensagem("mensagemAcesso","Conta sem perfil autorizado.");
+    return;
+  }
+
+  perfil = "cliente";
+  nomeLogado = clienteDoc.data().nome || "Cliente";
+
+  el("saudacaoCliente").textContent = nomeLogado;
+
+  mostrarApenas("areaCliente");
+
   carregarServicos();
   carregarProfissionais();
-  carregarDadosSalvos();
-};
+  carregarMeusAgendamentos();
+}
+
+// ==================================================
+// 17. IDENTIFICAÇÃO AUTOMÁTICA
+// ==================================================
+
+auth.onAuthStateChanged(async user => {
+  if (criandoConta) return;
+
+  limparEscutas();
+  fecharChat();
+
+  usuario = user;
+  perfil = null;
+  nomeLogado = "";
+
+  if (!user) {
+    mostrarApenas("acesso");
+    return;
+  }
+
+  try {
+    await iniciarSessao(user);
+  } catch(erro) {
+    console.error(erro);
+    alert("Erro ao carregar sua conta: " + erro.message);
+  }
+});
+
+// ==================================================
+// 18. SAIR
+// ==================================================
+
+async function sair() {
+  fecharChat();
+  limparEscutas();
+  await auth.signOut();
+}
 
 </script>
 </body>
