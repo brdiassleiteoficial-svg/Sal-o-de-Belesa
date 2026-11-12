@@ -1,0 +1,413 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0e0f12">
+<title>Bella Beauty Executive</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#0e0f12;color:#fff;
+ font-family:Arial,sans-serif;padding-bottom:30px
+}
+:root{--gold:#d4af37;--card:#191b20;--border:#30333b}
+header{
+ background:#090a0c;padding:18px;
+ border-bottom:1px solid var(--gold);
+ display:flex;justify-content:space-between;
+ align-items:center;position:sticky;top:0;z-index:5
+}
+.logo{color:var(--gold);font-size:21px;font-weight:bold}
+.logo small{display:block;color:#aaa;font-size:10px;letter-spacing:3px}
+button{
+ border:0;border-radius:9px;padding:12px;
+ background:var(--gold);color:#111;
+ font-weight:bold;cursor:pointer
+}
+button:disabled{opacity:.4}
+main{max-width:1000px;margin:auto;padding:18px}
+.card{
+ background:var(--card);border:1px solid var(--border);
+ border-radius:14px;padding:17px;margin-bottom:15px
+}
+h2{font-size:21px}
+h3{margin-top:0}
+.gold{color:var(--gold)}
+input,select,textarea{
+ width:100%;padding:13px;margin:7px 0 14px;
+ border-radius:8px;border:1px solid var(--border);
+ background:#101115;color:white;font-size:14px
+}
+label{font-size:13px;color:#bbb}
+.tabs{display:flex;gap:7px;overflow-x:auto;margin:15px 0}
+.tabs button{white-space:nowrap;background:#242730;color:white}
+.tabs button.active{background:var(--gold);color:#111}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.item{
+ background:#101115;border:1px solid var(--border);
+ padding:15px;border-radius:12px;cursor:pointer
+}
+.item.selected{border:2px solid var(--gold)}
+.price{color:var(--gold);font-weight:bold}
+.slot{margin:4px;background:#292d36;color:white}
+.slot.selected{background:var(--gold);color:#111}
+.hidden{display:none!important}
+.notice{color:#aaa;font-size:12px;line-height:1.6}
+footer{text-align:center;color:#777;font-size:11px;padding:25px}
+</style>
+</head>
+
+<body>
+
+<header>
+ <div class="logo">
+  BELLA BEAUTY
+  <small>EXECUTIVE SALON</small>
+ </div>
+ <button onclick="showAdmin()">Administração</button>
+</header>
+
+<main>
+
+<section id="client">
+ <div class="card">
+  <h2 class="gold">Sua beleza merece cuidado.</h2>
+  <p class="notice">Agende seu atendimento com praticidade e escolha seu profissional favorito.</p>
+ </div>
+
+ <div class="tabs">
+  <button class="active" onclick="tab('booking',this)">Agendar</button>
+  <button onclick="tab('appointments',this)">Minhas reservas</button>
+  <button onclick="tab('vip',this)">Clube VIP</button>
+  <button onclick="tab('loyalty',this)">Fidelidade</button>
+ </div>
+
+ <section id="booking">
+  <div class="card">
+   <h3>1. Escolha seus serviços</h3>
+   <div class="grid" id="services"></div>
+   <p>Total: <strong class="gold" id="total">R$ 0,00</strong></p>
+  </div>
+
+  <div class="card">
+   <h3>2. Escolha a profissional</h3>
+   <div class="grid" id="professionals"></div>
+  </div>
+
+  <div class="card">
+   <h3>3. Escolha data e horário</h3>
+   <label>Data do atendimento</label>
+   <input type="date" id="date" onchange="renderSlots()">
+   <div id="slots"></div>
+  </div>
+
+  <div class="card">
+   <h3>4. Seus dados</h3>
+   <label>Nome completo</label>
+   <input id="name" placeholder="Seu nome">
+   <label>WhatsApp</label>
+   <input id="phone" placeholder="(84) 99999-9999">
+   <label>Observações</label>
+   <textarea id="notes" placeholder="Conte alguma preferência..."></textarea>
+   <button style="width:100%" onclick="book()">CONFIRMAR AGENDAMENTO</button>
+  </div>
+ </section>
+
+ <section id="appointments" class="hidden">
+  <h2>Minhas reservas</h2>
+  <div id="myBookings"></div>
+ </section>
+
+ <section id="vip" class="hidden">
+  <h2 class="gold">Clube Bella VIP</h2>
+  <div class="grid">
+   <div class="card">
+    <h3>Beauty Basic</h3>
+    <h2 class="gold">R$ 79/mês</h2>
+    <p class="notice">Benefícios e descontos especiais.</p>
+    <button onclick="vip('Beauty Basic')">Tenho interesse</button>
+   </div>
+   <div class="card">
+    <h3>Beauty Premium</h3>
+    <h2 class="gold">R$ 129/mês</h2>
+    <p class="notice">Benefícios exclusivos e atendimento prioritário.</p>
+    <button onclick="vip('Beauty Premium')">Tenho interesse</button>
+   </div>
+  </div>
+  <p class="notice">Os planos são demonstrativos. O pagamento deverá ser configurado posteriormente.</p>
+ </section>
+
+ <section id="loyalty" class="hidden">
+  <div class="card">
+   <h2 class="gold">Cartão Fidelidade</h2>
+   <p>A cada atendimento concluído, ganhe um selo.</p>
+   <h2 id="stamps">0 / 10</h2>
+   <p class="notice">Complete os 10 selos e receba uma recompensa especial.</p>
+  </div>
+ </section>
+</section>
+
+<section id="admin" class="hidden">
+ <div class="card">
+  <h2 class="gold">Painel Administrativo</h2>
+  <button onclick="backClient()">Voltar ao salão</button>
+  <button onclick="logoutAdmin()">Sair</button>
+ </div>
+
+ <div class="grid">
+  <div class="card">
+   <p class="notice">Agendamentos</p>
+   <h2 id="count">0</h2>
+  </div>
+  <div class="card">
+   <p class="notice">Faturamento previsto</p>
+   <h2 class="gold" id="revenue">R$ 0,00</h2>
+  </div>
+ </div>
+
+ <div class="card">
+  <h3>Adicionar serviço</h3>
+  <input id="newService" placeholder="Nome do serviço">
+  <input id="newPrice" type="number" placeholder="Preço">
+  <button onclick="addService()">Adicionar serviço</button>
+ </div>
+
+ <div class="card">
+  <h3>Adicionar profissional</h3>
+  <input id="newProfessional" placeholder="Nome da profissional">
+  <button onclick="addProfessional()">Adicionar profissional</button>
+ </div>
+
+ <div class="card">
+  <h3>Todos os agendamentos</h3>
+  <div id="allBookings"></div>
+ </div>
+</section>
+
+</main>
+
+<footer>
+ BELLA BEAUTY EXECUTIVE • SISTEMA DE AGENDAMENTO
+</footer>
+
+<script>
+const defaultServices=[
+ {name:"Corte feminino",price:50},
+ {name:"Escova",price:40},
+ {name:"Hidratação",price:60},
+ {name:"Coloração",price:120},
+ {name:"Manicure",price:30},
+ {name:"Pedicure",price:35},
+ {name:"Design de sobrancelha",price:30},
+ {name:"Maquiagem",price:100},
+ {name:"Progressiva",price:180}
+];
+
+let services=JSON.parse(localStorage.getItem("beauty_services"))||defaultServices;
+let professionals=JSON.parse(localStorage.getItem("beauty_professionals"))||[
+ "Ana Silva","Mariana Costa","Juliana Santos"
+];
+let bookings=JSON.parse(localStorage.getItem("beauty_bookings"))||[];
+let selected=[];
+let professional="";
+let time="";
+
+const money=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+
+function save(){
+ localStorage.setItem("beauty_services",JSON.stringify(services));
+ localStorage.setItem("beauty_professionals",JSON.stringify(professionals));
+ localStorage.setItem("beauty_bookings",JSON.stringify(bookings));
+}
+
+function renderServices(){
+ document.getElementById("services").innerHTML=services.map((s,i)=>`
+ <div class="item ${selected.includes(i)?"selected":""}" onclick="chooseService(${i})">
+ <h3>${s.name}</h3>
+ <p class="price">${money(s.price)}</p>
+ </div>`).join("");
+ updateTotal();
+}
+
+function chooseService(i){
+ selected=selected.includes(i)?selected.filter(x=>x!==i):[...selected,i];
+ renderServices();
+}
+
+function updateTotal(){
+ let total=selected.reduce((v,i)=>v+Number(services[i].price),0);
+ document.getElementById("total").innerText=money(total);
+}
+
+function renderProfessionals(){
+ document.getElementById("professionals").innerHTML=professionals.map(p=>`
+ <div class="item ${professional===p?"selected":""}" onclick="chooseProfessional('${p.replace(/'/g,"\\'")}')">
+ <h3>${p}</h3><p class="notice">Profissional de beleza</p>
+ </div>`).join("");
+}
+
+function chooseProfessional(p){
+ professional=p;
+ renderProfessionals();
+ renderSlots();
+}
+
+function renderSlots(){
+ let date=document.getElementById("date").value;
+ let times=["08:00","09:00","10:00","11:00","13:00","14:00","15:00","16:00","17:00","18:00"];
+ document.getElementById("slots").innerHTML=times.map(t=>{
+ let busy=bookings.some(b=>b.date===date&&b.time===t&&b.professional===professional&&b.status!=="Cancelado");
+ return `<button class="slot ${time===t?"selected":""}" ${busy?"disabled":""} onclick="chooseTime('${t}')">${t}</button>`;
+ }).join("");
+}
+
+function chooseTime(t){
+ time=t;
+ renderSlots();
+}
+
+function book(){
+ let name=document.getElementById("name").value.trim();
+ let phone=document.getElementById("phone").value.trim();
+ let date=document.getElementById("date").value;
+
+ if(!name||!phone||!date||!time||!professional||selected.length===0){
+  alert("Preencha todos os dados e escolha serviço, profissional, data e horário.");
+  return;
+ }
+
+ let total=selected.reduce((v,i)=>v+Number(services[i].price),0);
+ let appointment={
+  id:Date.now(),
+  name,phone,date,time,professional,
+  items:selected.map(i=>services[i].name),
+  total,
+  notes:document.getElementById("notes").value,
+  status:"Confirmado"
+ };
+
+ if(bookings.some(b=>b.date===date&&b.time===time&&b.professional===professional&&b.status!=="Cancelado")){
+  alert("Este horário acabou de ser reservado. Escolha outro.");
+  return;
+ }
+
+ bookings.push(appointment);
+ save();
+
+ let msg=`Olá! Gostaria de confirmar meu agendamento no Bella Beauty.%0ACliente: ${name}%0AProfissional: ${professional}%0AData: ${date}%0AHorário: ${time}%0AServiços: ${appointment.items.join(", ")}%0ATotal: ${money(total)}`;
+
+ alert("Agendamento registrado!");
+ window.open("https://wa.me/?text="+msg,"_blank");
+
+ selected=[];professional="";time="";
+ renderServices();renderProfessionals();renderSlots();
+ renderMyBookings();
+}
+
+function tab(id,btn){
+ ["booking","appointments","vip","loyalty"].forEach(x=>document.getElementById(x).classList.add("hidden"));
+ document.getElementById(id).classList.remove("hidden");
+ document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
+ btn.classList.add("active");
+ if(id==="appointments")renderMyBookings();
+}
+
+function renderMyBookings(){
+ let phone=document.getElementById("phone").value;
+ let list=bookings.filter(b=>b.phone===phone);
+ document.getElementById("myBookings").innerHTML=list.length?list.map(b=>`
+ <div class="card">
+ <h3>${b.name}</h3>
+ <p>${b.items.join(", ")}</p>
+ <p>${b.date} às ${b.time}</p>
+ <p>Profissional: ${b.professional}</p>
+ <p class="gold">${money(b.total)}</p>
+ <p>Status: ${b.status}</p>
+ <button onclick="cancelBooking(${b.id})">Cancelar</button>
+ </div>`).join(""):"<p class='notice'>Informe seu WhatsApp na tela de agendamento para consultar suas reservas.</p>";
+}
+
+function cancelBooking(id){
+ if(!confirm("Deseja cancelar este horário?"))return;
+ bookings=bookings.map(b=>b.id===id?{...b,status:"Cancelado"}:b);
+ save();renderMyBookings();
+}
+
+function showAdmin(){
+ if(prompt("Senha administrativa:")!=="admin123"){
+  alert("Senha incorreta");return;
+ }
+ document.getElementById("client").classList.add("hidden");
+ document.getElementById("admin").classList.remove("hidden");
+ renderAdmin();
+}
+
+function backClient(){
+ document.getElementById("admin").classList.add("hidden");
+ document.getElementById("client").classList.remove("hidden");
+}
+
+function logoutAdmin(){backClient();}
+
+function renderAdmin(){
+ let active=bookings.filter(b=>b.status!=="Cancelado");
+ document.getElementById("count").innerText=active.length;
+ document.getElementById("revenue").innerText=money(active.reduce((v,b)=>v+b.total,0));
+
+ document.getElementById("allBookings").innerHTML=bookings.length?bookings.map(b=>`
+ <div class="card">
+ <h3>${b.name}</h3>
+ <p>${b.phone}</p>
+ <p>${b.date} às ${b.time}</p>
+ <p>${b.professional}</p>
+ <p>${b.items.join(", ")}</p>
+ <p class="gold">${money(b.total)}</p>
+ <p>Status: ${b.status}</p>
+ <button onclick="finishBooking(${b.id})">Concluir atendimento</button>
+ <button onclick="cancelBooking(${b.id});renderAdmin()">Cancelar</button>
+ </div>`).join(""):"Nenhum agendamento.";
+}
+
+function finishBooking(id){
+ bookings=bookings.map(b=>b.id===id?{...b,status:"Concluído"}:b);
+ save();renderAdmin();
+}
+
+function addService(){
+ let name=document.getElementById("newService").value.trim();
+ let price=Number(document.getElementById("newPrice").value);
+ if(!name||price<=0)return alert("Informe serviço e preço.");
+ services.push({name,price});
+ save();renderServices();renderAdmin();
+ document.getElementById("newService").value="";
+ document.getElementById("newPrice").value="";
+}
+
+function addProfessional(){
+ let name=document.getElementById("newProfessional").value.trim();
+ if(!name)return;
+ professionals.push(name);
+ save();renderProfessionals();renderAdmin();
+ document.getElementById("newProfessional").value="";
+}
+
+function vip(plan){
+ alert("Você escolheu o plano "+plan+". Entre em contato com o salão para contratar.");
+}
+
+function renderLoyalty(){
+ let stamps=Number(localStorage.getItem("beauty_stamps")||0);
+ document.getElementById("stamps").innerText=stamps+" / 10";
+}
+
+document.getElementById("date").min=new Date().toISOString().split("T")[0];
+renderServices();
+renderProfessionals();
+renderSlots();
+renderLoyalty();
+</script>
+</body>
+</html>
