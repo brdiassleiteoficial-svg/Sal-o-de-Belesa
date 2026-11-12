@@ -4,410 +4,822 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0e0f12">
-<title>Bella Beauty Executive</title>
+<meta name="theme-color" content="#170e25">
+<meta name="description" content="Agende seu horário no nosso salão de beleza.">
+<title>Bella Beauty | Salão de Beleza</title>
 
 <style>
-*{box-sizing:border-box}
-body{
- margin:0;background:#0e0f12;color:#fff;
- font-family:Arial,sans-serif;padding-bottom:30px
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap');
+
+:root {
+  --bg:#130d1d;
+  --panel:#21152e;
+  --panel2:#2b1b39;
+  --pink:#ff4f91;
+  --purple:#a855f7;
+  --coral:#ff906f;
+  --gold:#f6c76b;
+  --text:#fff7fc;
+  --muted:#b9a9c3;
 }
-:root{--gold:#d4af37;--card:#191b20;--border:#30333b}
-header{
- background:#090a0c;padding:18px;
- border-bottom:1px solid var(--gold);
- display:flex;justify-content:space-between;
- align-items:center;position:sticky;top:0;z-index:5
+
+* {box-sizing:border-box;margin:0;padding:0}
+
+body {
+  background:
+    radial-gradient(circle at 10% 0%,#54204b55,transparent 35%),
+    radial-gradient(circle at 100% 30%,#582c8050,transparent 35%),
+    var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  min-height:100vh;
 }
-.logo{color:var(--gold);font-size:21px;font-weight:bold}
-.logo small{display:block;color:#aaa;font-size:10px;letter-spacing:3px}
-button{
- border:0;border-radius:9px;padding:12px;
- background:var(--gold);color:#111;
- font-weight:bold;cursor:pointer
+
+button,input,select,textarea {font:inherit}
+button {cursor:pointer}
+
+header {
+  padding:20px 6%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #ffffff12;
+  background:#160e20d9;
+  position:sticky;
+  top:0;
+  z-index:10;
+  backdrop-filter:blur(15px);
 }
-button:disabled{opacity:.4}
-main{max-width:1000px;margin:auto;padding:18px}
-.card{
- background:var(--card);border:1px solid var(--border);
- border-radius:14px;padding:17px;margin-bottom:15px
+
+.logo {
+  font-family:'Playfair Display',serif;
+  font-size:25px;
+  font-weight:800;
+  background:linear-gradient(90deg,#ff70a8,#c084fc,#f6c76b);
+  -webkit-background-clip:text;
+  color:transparent;
 }
-h2{font-size:21px}
-h3{margin-top:0}
-.gold{color:var(--gold)}
-input,select,textarea{
- width:100%;padding:13px;margin:7px 0 14px;
- border-radius:8px;border:1px solid var(--border);
- background:#101115;color:white;font-size:14px
+
+.logo small {
+  display:block;
+  font:10px 'DM Sans',sans-serif;
+  letter-spacing:4px;
+  color:#d9b7e9;
+  text-align:center;
 }
-label{font-size:13px;color:#bbb}
-.tabs{display:flex;gap:7px;overflow-x:auto;margin:15px 0}
-.tabs button{white-space:nowrap;background:#242730;color:white}
-.tabs button.active{background:var(--gold);color:#111}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
-.item{
- background:#101115;border:1px solid var(--border);
- padding:15px;border-radius:12px;cursor:pointer
+
+nav {display:flex;gap:20px;align-items:center}
+nav a {
+  color:#e6d7ec;
+  text-decoration:none;
+  font-size:13px;
+  font-weight:600;
 }
-.item.selected{border:2px solid var(--gold)}
-.price{color:var(--gold);font-weight:bold}
-.slot{margin:4px;background:#292d36;color:white}
-.slot.selected{background:var(--gold);color:#111}
-.hidden{display:none!important}
-.notice{color:#aaa;font-size:12px;line-height:1.6}
-footer{text-align:center;color:#777;font-size:11px;padding:25px}
+nav a:hover {color:var(--pink)}
+
+.admin-btn {
+  background:linear-gradient(110deg,var(--pink),var(--purple));
+  border:0;
+  color:white;
+  padding:10px 16px;
+  border-radius:30px;
+  font-weight:800;
+  font-size:12px;
+}
+
+main {max-width:1150px;margin:auto;padding:30px 20px 70px}
+
+.hero {
+  position:relative;
+  overflow:hidden;
+  padding:55px 35px;
+  border-radius:28px;
+  background:
+    linear-gradient(110deg,#3b1740ee,#231638ee 55%,#38204fdd),
+    var(--panel);
+  border:1px solid #ff8fc533;
+  box-shadow:0 20px 70px #0005;
+  margin-bottom:35px;
+}
+
+.hero:after {
+  content:"✿";
+  position:absolute;
+  right:6%;
+  top:10px;
+  font-size:180px;
+  color:#ff8bc51a;
+  transform:rotate(-15deg);
+}
+
+.hero-content {position:relative;z-index:1;max-width:650px}
+
+.tag {
+  display:inline-block;
+  color:#ffd2e5;
+  background:#ff4f9122;
+  border:1px solid #ff4f9155;
+  padding:8px 15px;
+  border-radius:30px;
+  font-size:11px;
+  letter-spacing:2px;
+  font-weight:800;
+  margin-bottom:18px;
+}
+
+h1 {
+  font:800 clamp(34px,6vw,58px)/1.1 'Playfair Display',serif;
+  margin-bottom:18px;
+}
+h1 span {
+  background:linear-gradient(90deg,#ff72a9,#c084fc,#ffd18a);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.hero p {color:#e2d3e9;line-height:1.8;max-width:510px;font-size:14px}
+
+.primary-btn {
+  border:0;
+  background:linear-gradient(100deg,var(--pink),var(--purple));
+  color:white;
+  padding:15px 24px;
+  border-radius:30px;
+  font-weight:800;
+  margin-top:25px;
+  box-shadow:0 8px 25px #ff4f9140;
+  transition:.25s;
+}
+.primary-btn:hover {transform:translateY(-3px);filter:brightness(1.12)}
+
+.section-title {margin:40px 0 20px}
+.section-title h2 {font:700 27px 'Playfair Display',serif}
+.section-title p {color:var(--muted);font-size:13px;margin-top:7px}
+
+.services {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:15px;
+}
+
+.service {
+  background:linear-gradient(145deg,#2b1b39,#20142b);
+  border:1px solid #ffffff12;
+  padding:20px;
+  border-radius:19px;
+  transition:.25s;
+}
+.service:hover {transform:translateY(-5px);border-color:#ff70a855}
+
+.service-icon {
+  width:48px;height:48px;
+  display:grid;place-items:center;
+  border-radius:15px;
+  font-size:24px;
+  margin-bottom:15px;
+  background:linear-gradient(135deg,#ff4f9133,#a855f733);
+}
+.service h3 {font-size:15px;margin-bottom:7px}
+.service p {font-size:12px;color:var(--muted);line-height:1.6}
+.price {color:#ffc0da;font-size:19px;font-weight:800;margin-top:14px}
+
+.professionals {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:15px;
+}
+.professional {
+  background:var(--panel);
+  border:1px solid #ffffff12;
+  border-radius:18px;
+  padding:20px;
+  text-align:center;
+}
+.avatar {
+  width:68px;height:68px;
+  border-radius:50%;
+  display:grid;place-items:center;
+  margin:0 auto 12px;
+  font-size:30px;
+  background:linear-gradient(135deg,var(--pink),var(--purple));
+}
+.professional h3 {font-size:15px}
+.professional p {color:var(--muted);font-size:12px;margin-top:5px}
+
+.booking {
+  background:linear-gradient(145deg,#2b1b39,#20142b);
+  border:1px solid #d17bca44;
+  padding:25px;
+  border-radius:23px;
+  margin-top:40px;
+}
+.booking h2 {font:700 27px 'Playfair Display',serif;margin-bottom:8px}
+.booking>p {color:var(--muted);font-size:13px;margin-bottom:25px}
+
+.form-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+.field {display:flex;flex-direction:column;gap:8px}
+.field.full {grid-column:1/-1}
+.field label {font-size:12px;font-weight:700;color:#f5d8e9}
+.field input,.field select,.field textarea {
+  background:#170f22;
+  border:1px solid #ffffff20;
+  border-radius:12px;
+  padding:13px;
+  color:white;
+  outline:none;
+  width:100%;
+}
+.field input:focus,.field select:focus,.field textarea:focus {
+  border-color:var(--pink);
+}
+.field option {background:#21152e}
+
+.slots {
+  display:flex;
+  flex-wrap:wrap;
+  gap:9px;
+}
+.slot {
+  border:1px solid #ffffff25;
+  background:#170f22;
+  color:#eee;
+  border-radius:10px;
+  padding:10px 14px;
+  font-size:12px;
+}
+.slot.selected {
+  background:linear-gradient(100deg,var(--pink),var(--purple));
+  border-color:transparent;
+  color:white;
+  font-weight:800;
+}
+.slot:disabled {opacity:.3;cursor:not-allowed;text-decoration:line-through}
+
+#message {
+  margin-top:15px;
+  padding:12px;
+  border-radius:10px;
+  display:none;
+  font-size:13px;
+}
+.success {background:#168c5b30;color:#8df2bd}
+.error {background:#d6385830;color:#ffb2c0}
+
+.my-bookings {
+  margin-top:35px;
+  padding:23px;
+  border-radius:20px;
+  background:#21152e;
+  border:1px solid #ffffff12;
+}
+.my-bookings h2 {font:700 24px 'Playfair Display',serif;margin-bottom:15px}
+.booking-item {
+  padding:15px;
+  background:#170f22;
+  border-radius:12px;
+  margin-top:10px;
+  border-left:3px solid var(--pink);
+  font-size:13px;
+  line-height:1.8;
+}
+.booking-item button,.small-btn {
+  border:0;
+  background:#ff4f9122;
+  color:#ff9fc2;
+  padding:7px 11px;
+  border-radius:8px;
+  font-size:11px;
+  font-weight:700;
+  margin-top:8px;
+}
+
+.benefits {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:15px;
+  margin-top:35px;
+}
+.benefit {
+  background:linear-gradient(130deg,#ff4f9120,#a855f720);
+  border:1px solid #ffffff12;
+  padding:20px;
+  border-radius:17px;
+}
+.benefit strong {display:block;margin-bottom:7px}
+.benefit p {font-size:12px;color:var(--muted);line-height:1.6}
+
+.admin-panel {
+  display:none;
+  margin-top:35px;
+  padding:25px;
+  background:#21152e;
+  border:1px solid #f6c76b55;
+  border-radius:22px;
+}
+.admin-panel h2 {font:700 26px 'Playfair Display',serif;margin-bottom:20px}
+.admin-stats {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(130px,1fr));
+  gap:12px;
+  margin-bottom:20px;
+}
+.stat {
+  background:#170f22;
+  padding:17px;
+  border-radius:14px;
+}
+.stat strong {display:block;font-size:25px;color:#ff91bb}
+.stat span {font-size:11px;color:var(--muted)}
+.admin-list {margin-top:15px}
+.admin-list h3 {margin:20px 0 10px;font-size:15px;color:#ffd2e5}
+
+footer {
+  border-top:1px solid #ffffff12;
+  padding:30px 20px;
+  text-align:center;
+  color:var(--muted);
+  font-size:12px;
+}
+footer strong {
+  display:block;
+  color:#ff9bc1;
+  font:700 22px 'Playfair Display',serif;
+  margin-bottom:8px;
+}
+
+@media(max-width:650px) {
+  header {padding:15px 5%}
+  nav {gap:10px}
+  nav a {display:none}
+  .hero {padding:40px 23px}
+  .hero:after {font-size:110px;right:-10px;top:30px}
+  main {padding:22px 14px 50px}
+  .form-grid {grid-template-columns:1fr}
+  .field.full {grid-column:auto}
+  .booking {padding:19px}
+}
 </style>
 </head>
 
 <body>
 
 <header>
- <div class="logo">
-  BELLA BEAUTY
-  <small>EXECUTIVE SALON</small>
- </div>
- <button onclick="showAdmin()">Administração</button>
+  <div class="logo">Bella Beauty<small>SALÃO DE BELEZA</small></div>
+  <nav>
+    <a href="#inicio">Início</a>
+    <a href="#servicos">Serviços</a>
+    <a href="#equipe">Profissionais</a>
+    <a href="#agendar">Agendar</a>
+    <button class="admin-btn" onclick="adminLogin()">Área administrativa</button>
+  </nav>
 </header>
 
 <main>
 
-<section id="client">
- <div class="card">
-  <h2 class="gold">Sua beleza merece cuidado.</h2>
-  <p class="notice">Agende seu atendimento com praticidade e escolha seu profissional favorito.</p>
- </div>
-
- <div class="tabs">
-  <button class="active" onclick="tab('booking',this)">Agendar</button>
-  <button onclick="tab('appointments',this)">Minhas reservas</button>
-  <button onclick="tab('vip',this)">Clube VIP</button>
-  <button onclick="tab('loyalty',this)">Fidelidade</button>
- </div>
-
- <section id="booking">
-  <div class="card">
-   <h3>1. Escolha seus serviços</h3>
-   <div class="grid" id="services"></div>
-   <p>Total: <strong class="gold" id="total">R$ 0,00</strong></p>
+<section class="hero" id="inicio">
+  <div class="hero-content">
+    <span class="tag">SEU MOMENTO DE BRILHAR ✨</span>
+    <h1>Realce sua beleza.<br><span>Desperte sua essência.</span></h1>
+    <p>Um espaço especial para cuidar de você. Venha viver uma experiência de beleza, carinho e autoestima.</p>
+    <button class="primary-btn" onclick="document.getElementById('agendar').scrollIntoView({behavior:'smooth'})">
+      Agendar meu horário ✨
+    </button>
   </div>
-
-  <div class="card">
-   <h3>2. Escolha a profissional</h3>
-   <div class="grid" id="professionals"></div>
-  </div>
-
-  <div class="card">
-   <h3>3. Escolha data e horário</h3>
-   <label>Data do atendimento</label>
-   <input type="date" id="date" onchange="renderSlots()">
-   <div id="slots"></div>
-  </div>
-
-  <div class="card">
-   <h3>4. Seus dados</h3>
-   <label>Nome completo</label>
-   <input id="name" placeholder="Seu nome">
-   <label>WhatsApp</label>
-   <input id="phone" placeholder="(84) 99999-9999">
-   <label>Observações</label>
-   <textarea id="notes" placeholder="Conte alguma preferência..."></textarea>
-   <button style="width:100%" onclick="book()">CONFIRMAR AGENDAMENTO</button>
-  </div>
- </section>
-
- <section id="appointments" class="hidden">
-  <h2>Minhas reservas</h2>
-  <div id="myBookings"></div>
- </section>
-
- <section id="vip" class="hidden">
-  <h2 class="gold">Clube Bella VIP</h2>
-  <div class="grid">
-   <div class="card">
-    <h3>Beauty Basic</h3>
-    <h2 class="gold">R$ 79/mês</h2>
-    <p class="notice">Benefícios e descontos especiais.</p>
-    <button onclick="vip('Beauty Basic')">Tenho interesse</button>
-   </div>
-   <div class="card">
-    <h3>Beauty Premium</h3>
-    <h2 class="gold">R$ 129/mês</h2>
-    <p class="notice">Benefícios exclusivos e atendimento prioritário.</p>
-    <button onclick="vip('Beauty Premium')">Tenho interesse</button>
-   </div>
-  </div>
-  <p class="notice">Os planos são demonstrativos. O pagamento deverá ser configurado posteriormente.</p>
- </section>
-
- <section id="loyalty" class="hidden">
-  <div class="card">
-   <h2 class="gold">Cartão Fidelidade</h2>
-   <p>A cada atendimento concluído, ganhe um selo.</p>
-   <h2 id="stamps">0 / 10</h2>
-   <p class="notice">Complete os 10 selos e receba uma recompensa especial.</p>
-  </div>
- </section>
 </section>
 
-<section id="admin" class="hidden">
- <div class="card">
-  <h2 class="gold">Painel Administrativo</h2>
-  <button onclick="backClient()">Voltar ao salão</button>
-  <button onclick="logoutAdmin()">Sair</button>
- </div>
-
- <div class="grid">
-  <div class="card">
-   <p class="notice">Agendamentos</p>
-   <h2 id="count">0</h2>
+<section id="servicos">
+  <div class="section-title">
+    <h2>Nossos serviços 🌸</h2>
+    <p>Escolha seu cuidado especial.</p>
   </div>
-  <div class="card">
-   <p class="notice">Faturamento previsto</p>
-   <h2 class="gold" id="revenue">R$ 0,00</h2>
+  <div class="services" id="service-list"></div>
+</section>
+
+<section id="equipe">
+  <div class="section-title">
+    <h2>Quem cuida de você 💖</h2>
+    <p>Profissionais preparadas para valorizar sua beleza.</p>
   </div>
- </div>
+  <div class="professionals" id="professional-list"></div>
+</section>
 
- <div class="card">
-  <h3>Adicionar serviço</h3>
-  <input id="newService" placeholder="Nome do serviço">
-  <input id="newPrice" type="number" placeholder="Preço">
-  <button onclick="addService()">Adicionar serviço</button>
- </div>
+<section class="booking" id="agendar">
+  <h2>Agende seu momento ✨</h2>
+  <p>Preencha os dados abaixo e escolha seu melhor horário.</p>
 
- <div class="card">
-  <h3>Adicionar profissional</h3>
-  <input id="newProfessional" placeholder="Nome da profissional">
-  <button onclick="addProfessional()">Adicionar profissional</button>
- </div>
+  <form id="booking-form">
+    <div class="form-grid">
 
- <div class="card">
-  <h3>Todos os agendamentos</h3>
-  <div id="allBookings"></div>
- </div>
+      <div class="field full">
+        <label>Seu nome completo</label>
+        <input id="client-name" required placeholder="Digite seu nome">
+      </div>
+
+      <div class="field">
+        <label>WhatsApp</label>
+        <input id="client-phone" type="tel" required placeholder="(84) 99999-9999">
+      </div>
+
+      <div class="field">
+        <label>Serviço desejado</label>
+        <select id="service-select" required></select>
+      </div>
+
+      <div class="field">
+        <label>Profissional</label>
+        <select id="professional-select" required></select>
+      </div>
+
+      <div class="field">
+        <label>Data desejada</label>
+        <input type="date" id="booking-date" required>
+      </div>
+
+      <div class="field full">
+        <label>Escolha um horário</label>
+        <div class="slots" id="time-slots"></div>
+      </div>
+
+      <div class="field full">
+        <label>Observações (opcional)</label>
+        <textarea id="notes" rows="3" placeholder="Alguma preferência ou informação?"></textarea>
+      </div>
+
+      <div class="field full">
+        <button class="primary-btn" type="submit" style="width:100%;margin-top:0">
+          Confirmar agendamento 💗
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <div id="message"></div>
+</section>
+
+<section class="my-bookings">
+  <h2>Consultar meus horários 📅</h2>
+  <p style="font-size:12px;color:var(--muted);margin-bottom:12px">Informe seu WhatsApp para consultar seus agendamentos.</p>
+  <div class="field">
+    <input id="search-phone" placeholder="Digite seu WhatsApp">
+    <button class="primary-btn" onclick="findBookings()" style="margin-top:5px">Consultar horários</button>
+  </div>
+  <div id="my-bookings-list"></div>
+</section>
+
+<section class="benefits">
+  <div class="benefit">
+    <strong>💎 Atendimento especial</strong>
+    <p>Cuidamos de cada detalhe para proporcionar uma experiência agradável.</p>
+  </div>
+  <div class="benefit">
+    <strong>🌷 Seu momento</strong>
+    <p>Um ambiente pensado para valorizar sua autoestima e bem-estar.</p>
+  </div>
+  <div class="benefit">
+    <strong>📅 Agendamento fácil</strong>
+    <p>Escolha o serviço, a profissional e o horário de sua preferência.</p>
+  </div>
+</section>
+
+<section class="admin-panel" id="admin-panel">
+  <h2>💼 Painel administrativo</h2>
+  <div class="admin-stats">
+    <div class="stat"><strong id="total-bookings">0</strong><span>Agendamentos</span></div>
+    <div class="stat"><strong id="today-bookings">0</strong><span>Para hoje</span></div>
+    <div class="stat"><strong id="total-services">0</strong><span>Serviços</span></div>
+  </div>
+
+  <button class="small-btn" onclick="addService()">+ Adicionar serviço</button>
+  <button class="small-btn" onclick="addProfessional()">+ Adicionar profissional</button>
+  <button class="small-btn" onclick="exportBookings()">Exportar agendamentos</button>
+  <button class="small-btn" onclick="adminLogout()">Sair do painel</button>
+
+  <div class="admin-list">
+    <h3>Agendamentos recebidos</h3>
+    <div id="admin-bookings"></div>
+  </div>
 </section>
 
 </main>
 
 <footer>
- BELLA BEAUTY EXECUTIVE • SISTEMA DE AGENDAMENTO
+  <strong>Bella Beauty 🌸</strong>
+  Seu momento de beleza começa aqui.
+  <p style="margin-top:10px">© 2026 Bella Beauty. Todos os direitos reservados.</p>
 </footer>
 
 <script>
-const defaultServices=[
- {name:"Corte feminino",price:50},
- {name:"Escova",price:40},
- {name:"Hidratação",price:60},
- {name:"Coloração",price:120},
- {name:"Manicure",price:30},
- {name:"Pedicure",price:35},
- {name:"Design de sobrancelha",price:30},
- {name:"Maquiagem",price:100},
- {name:"Progressiva",price:180}
+const defaultServices = [
+  {id:1,name:"Corte feminino",desc:"Corte e finalização dos cabelos.",price:65,icon:"✂️"},
+  {id:2,name:"Escova",desc:"Cabelos alinhados e com brilho.",price:50,icon:"💇‍♀️"},
+  {id:3,name:"Manicure",desc:"Cuidado e beleza para suas unhas.",price:30,icon:"💅"},
+  {id:4,name:"Pedicure",desc:"Cuidado especial para seus pés.",price:35,icon:"🦶"},
+  {id:5,name:"Coloração",desc:"Renove seu visual com novas cores.",price:120,icon:"🎨"},
+  {id:6,name:"Hidratação",desc:"Tratamento para cabelos saudáveis.",price:80,icon:"✨"}
 ];
 
-let services=JSON.parse(localStorage.getItem("beauty_services"))||defaultServices;
-let professionals=JSON.parse(localStorage.getItem("beauty_professionals"))||[
- "Ana Silva","Mariana Costa","Juliana Santos"
+const defaultProfessionals = [
+  {id:1,name:"Ana Silva",role:"Cabeleireira",icon:"👩🏻‍🦰"},
+  {id:2,name:"Mariana Costa",role:"Manicure e pedicure",icon:"💅"},
+  {id:3,name:"Juliana Santos",role:"Especialista em beleza",icon:"👩🏽"}
 ];
-let bookings=JSON.parse(localStorage.getItem("beauty_bookings"))||[];
-let selected=[];
-let professional="";
-let time="";
 
-const money=v=>v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+let services = JSON.parse(localStorage.getItem("bb_services")) || defaultServices;
+let professionals = JSON.parse(localStorage.getItem("bb_professionals")) || defaultProfessionals;
+let bookings = JSON.parse(localStorage.getItem("bb_bookings")) || [];
+let selectedTime = "";
+let adminActive = false;
 
-function save(){
- localStorage.setItem("beauty_services",JSON.stringify(services));
- localStorage.setItem("beauty_professionals",JSON.stringify(professionals));
- localStorage.setItem("beauty_bookings",JSON.stringify(bookings));
+const $ = id => document.getElementById(id);
+
+function saveData() {
+  localStorage.setItem("bb_services",JSON.stringify(services));
+  localStorage.setItem("bb_professionals",JSON.stringify(professionals));
+  localStorage.setItem("bb_bookings",JSON.stringify(bookings));
 }
 
-function renderServices(){
- document.getElementById("services").innerHTML=services.map((s,i)=>`
- <div class="item ${selected.includes(i)?"selected":""}" onclick="chooseService(${i})">
- <h3>${s.name}</h3>
- <p class="price">${money(s.price)}</p>
- </div>`).join("");
- updateTotal();
+function renderServices() {
+  $("service-list").innerHTML = services.map(s => `
+    <div class="service">
+      <div class="service-icon">${s.icon}</div>
+      <h3>${escapeHTML(s.name)}</h3>
+      <p>${escapeHTML(s.desc)}</p>
+      <div class="price">R$ ${Number(s.price).toFixed(2).replace(".",",")}</div>
+    </div>
+  `).join("");
+
+  $("service-select").innerHTML =
+    '<option value="">Selecione um serviço</option>' +
+    services.map(s=>`<option value="${s.id}">${escapeHTML(s.name)} — R$ ${Number(s.price).toFixed(2).replace(".",",")}</option>`).join("");
 }
 
-function chooseService(i){
- selected=selected.includes(i)?selected.filter(x=>x!==i):[...selected,i];
- renderServices();
+function renderProfessionals() {
+  $("professional-list").innerHTML = professionals.map(p=>`
+    <div class="professional">
+      <div class="avatar">${p.icon}</div>
+      <h3>${escapeHTML(p.name)}</h3>
+      <p>${escapeHTML(p.role)}</p>
+    </div>
+  `).join("");
+
+  $("professional-select").innerHTML =
+    '<option value="">Selecione uma profissional</option>' +
+    professionals.map(p=>`<option value="${p.id}">${escapeHTML(p.name)}</option>`).join("");
 }
 
-function updateTotal(){
- let total=selected.reduce((v,i)=>v+Number(services[i].price),0);
- document.getElementById("total").innerText=money(total);
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g,c=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
+  }[c]));
 }
 
-function renderProfessionals(){
- document.getElementById("professionals").innerHTML=professionals.map(p=>`
- <div class="item ${professional===p?"selected":""}" onclick="chooseProfessional('${p.replace(/'/g,"\\'")}')">
- <h3>${p}</h3><p class="notice">Profissional de beleza</p>
- </div>`).join("");
+function localDate(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth()+1).padStart(2,"0");
+  const day = String(date.getDate()).padStart(2,"0");
+  return `${year}-${month}-${day}`;
 }
 
-function chooseProfessional(p){
- professional=p;
- renderProfessionals();
- renderSlots();
+$("booking-date").min = localDate();
+$("booking-date").value = localDate();
+
+function renderSlots() {
+  const date = $("booking-date").value;
+  const professionalId = $("professional-select").value;
+  const times = ["08:00","09:00","10:00","11:00","13:00","14:00","15:00","16:00","17:00"];
+
+  $("time-slots").innerHTML = "";
+  selectedTime = "";
+
+  times.forEach(time=>{
+    const occupied = bookings.some(b=>
+      b.date===date &&
+      String(b.professionalId)===String(professionalId) &&
+      b.time===time &&
+      b.status!=="Cancelado"
+    );
+
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "slot";
+    button.textContent = time;
+    button.disabled = occupied;
+    button.onclick = ()=>{
+      document.querySelectorAll(".slot").forEach(s=>s.classList.remove("selected"));
+      button.classList.add("selected");
+      selectedTime = time;
+    };
+    $("time-slots").appendChild(button);
+  });
 }
 
-function renderSlots(){
- let date=document.getElementById("date").value;
- let times=["08:00","09:00","10:00","11:00","13:00","14:00","15:00","16:00","17:00","18:00"];
- document.getElementById("slots").innerHTML=times.map(t=>{
- let busy=bookings.some(b=>b.date===date&&b.time===t&&b.professional===professional&&b.status!=="Cancelado");
- return `<button class="slot ${time===t?"selected":""}" ${busy?"disabled":""} onclick="chooseTime('${t}')">${t}</button>`;
- }).join("");
+$("booking-date").addEventListener("change",renderSlots);
+$("professional-select").addEventListener("change",renderSlots);
+
+$("booking-form").addEventListener("submit",function(e){
+  e.preventDefault();
+
+  const name = $("client-name").value.trim();
+  const phone = $("client-phone").value.trim();
+  const serviceId = $("service-select").value;
+  const professionalId = $("professional-select").value;
+  const date = $("booking-date").value;
+
+  if(!selectedTime) return showMessage("Escolha um horário disponível.","error");
+
+  if(!serviceId || !professionalId) return showMessage("Selecione o serviço e a profissional.","error");
+
+  if(date < localDate()) return showMessage("Escolha uma data válida.","error");
+
+  const conflict = bookings.some(b=>
+    b.date===date &&
+    String(b.professionalId)===String(professionalId) &&
+    b.time===selectedTime &&
+    b.status!=="Cancelado"
+  );
+
+  if(conflict) return showMessage("Este horário acabou de ser reservado. Escolha outro.","error");
+
+  const service = services.find(s=>s.id==serviceId);
+  const professional = professionals.find(p=>p.id==professionalId);
+
+  const appointment = {
+    id:Date.now(),
+    name,phone,serviceId:Number(serviceId),
+    service:service.name,
+    professionalId:Number(professionalId),
+    professional:professional.name,
+    date,time:selectedTime,
+    notes:$("notes").value.trim(),
+    status:"Agendado"
+  };
+
+  bookings.push(appointment);
+  saveData();
+
+  showMessage("Agendamento registrado! Envie a confirmação pelo WhatsApp.","success");
+
+  const message = `Olá! Meu nome é ${name}. Gostaria de confirmar meu agendamento:\\nServiço: ${service.name}\\nProfissional: ${professional.name}\\nData: ${date}\\nHorário: ${selectedTime}`;
+
+  const whatsapp = phone.replace(/\D/g,"");
+  const whatsappURL = "https://wa.me/55"+whatsapp+"?text="+encodeURIComponent(message);
+
+  const link = document.createElement("a");
+  link.href = whatsappURL;
+  link.target = "_blank";
+  link.rel = "noopener";
+  link.textContent = "Abrir WhatsApp para enviar mensagem";
+  link.style.cssText = "display:block;margin-top:10px;color:#ffb1d0;font-weight:bold";
+  $("message").appendChild(link);
+
+  this.reset();
+  $("booking-date").value = localDate();
+  selectedTime = "";
+  renderSlots();
+  if(adminActive) renderAdmin();
+});
+
+function showMessage(text,type) {
+  const box = $("message");
+  box.style.display = "block";
+  box.className = type;
+  box.textContent = text;
 }
 
-function chooseTime(t){
- time=t;
- renderSlots();
+function findBookings() {
+  const phone = $("search-phone").value.replace(/\D/g,"");
+  if(!phone) return alert("Informe seu WhatsApp.");
+
+  const found = bookings.filter(b=>b.phone.replace(/\D/g,"")===phone);
+  const area = $("my-bookings-list");
+
+  if(!found.length) {
+    area.innerHTML = '<p style="color:#b9a9c3;font-size:13px;margin-top:15px">Nenhum agendamento encontrado para esse número.</p>';
+    return;
+  }
+
+  area.innerHTML = found.map(b=>`
+    <div class="booking-item">
+      <strong>${escapeHTML(b.service)}</strong><br>
+      Profissional: ${escapeHTML(b.professional)}<br>
+      Data: ${escapeHTML(b.date)} às ${escapeHTML(b.time)}<br>
+      Situação: ${escapeHTML(b.status)}
+      ${b.status!=="Cancelado" ? `<br><button onclick="cancelBooking(${b.id})">Cancelar agendamento</button>` : ""}
+    </div>
+  `).join("");
 }
 
-function book(){
- let name=document.getElementById("name").value.trim();
- let phone=document.getElementById("phone").value.trim();
- let date=document.getElementById("date").value;
-
- if(!name||!phone||!date||!time||!professional||selected.length===0){
-  alert("Preencha todos os dados e escolha serviço, profissional, data e horário.");
-  return;
- }
-
- let total=selected.reduce((v,i)=>v+Number(services[i].price),0);
- let appointment={
-  id:Date.now(),
-  name,phone,date,time,professional,
-  items:selected.map(i=>services[i].name),
-  total,
-  notes:document.getElementById("notes").value,
-  status:"Confirmado"
- };
-
- if(bookings.some(b=>b.date===date&&b.time===time&&b.professional===professional&&b.status!=="Cancelado")){
-  alert("Este horário acabou de ser reservado. Escolha outro.");
-  return;
- }
-
- bookings.push(appointment);
- save();
-
- let msg=`Olá! Gostaria de confirmar meu agendamento no Bella Beauty.%0ACliente: ${name}%0AProfissional: ${professional}%0AData: ${date}%0AHorário: ${time}%0AServiços: ${appointment.items.join(", ")}%0ATotal: ${money(total)}`;
-
- alert("Agendamento registrado!");
- window.open("https://wa.me/?text="+msg,"_blank");
-
- selected=[];professional="";time="";
- renderServices();renderProfessionals();renderSlots();
- renderMyBookings();
+function cancelBooking(id) {
+  if(!confirm("Deseja cancelar este agendamento?")) return;
+  const b = bookings.find(item=>item.id===id);
+  if(b) b.status="Cancelado";
+  saveData();
+  findBookings();
+  if(adminActive) renderAdmin();
 }
 
-function tab(id,btn){
- ["booking","appointments","vip","loyalty"].forEach(x=>document.getElementById(x).classList.add("hidden"));
- document.getElementById(id).classList.remove("hidden");
- document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
- btn.classList.add("active");
- if(id==="appointments")renderMyBookings();
+function adminLogin() {
+  if(adminActive) {
+    $("admin-panel").scrollIntoView({behavior:"smooth"});
+    return;
+  }
+
+  const password = prompt("Digite a senha administrativa:");
+  if(password==="admin123") {
+    adminActive=true;
+    $("admin-panel").style.display="block";
+    renderAdmin();
+    $("admin-panel").scrollIntoView({behavior:"smooth"});
+  } else if(password!==null) {
+    alert("Senha incorreta.");
+  }
 }
 
-function renderMyBookings(){
- let phone=document.getElementById("phone").value;
- let list=bookings.filter(b=>b.phone===phone);
- document.getElementById("myBookings").innerHTML=list.length?list.map(b=>`
- <div class="card">
- <h3>${b.name}</h3>
- <p>${b.items.join(", ")}</p>
- <p>${b.date} às ${b.time}</p>
- <p>Profissional: ${b.professional}</p>
- <p class="gold">${money(b.total)}</p>
- <p>Status: ${b.status}</p>
- <button onclick="cancelBooking(${b.id})">Cancelar</button>
- </div>`).join(""):"<p class='notice'>Informe seu WhatsApp na tela de agendamento para consultar suas reservas.</p>";
+function adminLogout() {
+  adminActive=false;
+  $("admin-panel").style.display="none";
 }
 
-function cancelBooking(id){
- if(!confirm("Deseja cancelar este horário?"))return;
- bookings=bookings.map(b=>b.id===id?{...b,status:"Cancelado"}:b);
- save();renderMyBookings();
+function renderAdmin() {
+  if(!adminActive) return;
+
+  const today = localDate();
+  $("total-bookings").textContent = bookings.length;
+  $("today-bookings").textContent = bookings.filter(b=>b.date===today && b.status!=="Cancelado").length;
+  $("total-services").textContent = services.length;
+
+  $("admin-bookings").innerHTML = bookings.length ? bookings.slice().reverse().map(b=>`
+    <div class="booking-item">
+      <strong>${escapeHTML(b.name)}</strong><br>
+      WhatsApp: ${escapeHTML(b.phone)}<br>
+      ${escapeHTML(b.service)} — ${escapeHTML(b.professional)}<br>
+      ${escapeHTML(b.date)} às ${escapeHTML(b.time)}<br>
+      Situação: ${escapeHTML(b.status)}
+      ${b.status!=="Cancelado" ? `<br><button onclick="adminCancel(${b.id})">Cancelar</button><button onclick="completeBooking(${b.id})">Concluir</button>` : ""}
+    </div>
+  `).join("") : "<p>Nenhum agendamento registrado.</p>";
 }
 
-function showAdmin(){
- if(prompt("Senha administrativa:")!=="admin123"){
-  alert("Senha incorreta");return;
- }
- document.getElementById("client").classList.add("hidden");
- document.getElementById("admin").classList.remove("hidden");
- renderAdmin();
+function adminCancel(id) {
+  const b=bookings.find(x=>x.id===id);
+  if(b) b.status="Cancelado";
+  saveData();
+  renderAdmin();
 }
 
-function backClient(){
- document.getElementById("admin").classList.add("hidden");
- document.getElementById("client").classList.remove("hidden");
+function completeBooking(id) {
+  const b=bookings.find(x=>x.id===id);
+  if(b) b.status="Concluído";
+  saveData();
+  renderAdmin();
 }
 
-function logoutAdmin(){backClient();}
-
-function renderAdmin(){
- let active=bookings.filter(b=>b.status!=="Cancelado");
- document.getElementById("count").innerText=active.length;
- document.getElementById("revenue").innerText=money(active.reduce((v,b)=>v+b.total,0));
-
- document.getElementById("allBookings").innerHTML=bookings.length?bookings.map(b=>`
- <div class="card">
- <h3>${b.name}</h3>
- <p>${b.phone}</p>
- <p>${b.date} às ${b.time}</p>
- <p>${b.professional}</p>
- <p>${b.items.join(", ")}</p>
- <p class="gold">${money(b.total)}</p>
- <p>Status: ${b.status}</p>
- <button onclick="finishBooking(${b.id})">Concluir atendimento</button>
- <button onclick="cancelBooking(${b.id});renderAdmin()">Cancelar</button>
- </div>`).join(""):"Nenhum agendamento.";
+function addService() {
+  const name=prompt("Nome do novo serviço:");
+  if(!name) return;
+  const price=Number(prompt("Preço do serviço (somente números):"));
+  if(!Number.isFinite(price) || price<0) return alert("Preço inválido.");
+  const desc=prompt("Descrição do serviço:") || "Atendimento especial.";
+  services.push({id:Date.now(),name,desc,price,icon:"✨"});
+  saveData();
+  renderServices();
+  renderAdmin();
 }
 
-function finishBooking(id){
- bookings=bookings.map(b=>b.id===id?{...b,status:"Concluído"}:b);
- save();renderAdmin();
+function addProfessional() {
+  const name=prompt("Nome da profissional:");
+  if(!name) return;
+  const role=prompt("Especialidade:") || "Profissional de beleza";
+  professionals.push({id:Date.now(),name,role,icon:"👩🏻"});
+  saveData();
+  renderProfessionals();
+  renderSlots();
+  alert("Profissional adicionada!");
 }
 
-function addService(){
- let name=document.getElementById("newService").value.trim();
- let price=Number(document.getElementById("newPrice").value);
- if(!name||price<=0)return alert("Informe serviço e preço.");
- services.push({name,price});
- save();renderServices();renderAdmin();
- document.getElementById("newService").value="";
- document.getElementById("newPrice").value="";
+function exportBookings() {
+  const content = [
+    ["Cliente","WhatsApp","Serviço","Profissional","Data","Horário","Situação"],
+    ...bookings.map(b=>[b.name,b.phone,b.service,b.professional,b.date,b.time,b.status])
+  ];
+  const csv = content.map(row=>row.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(";")).join("\n");
+  const blob = new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href=url;
+  a.download="agendamentos-bella-beauty.csv";
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
-function addProfessional(){
- let name=document.getElementById("newProfessional").value.trim();
- if(!name)return;
- professionals.push(name);
- save();renderProfessionals();renderAdmin();
- document.getElementById("newProfessional").value="";
-}
-
-function vip(plan){
- alert("Você escolheu o plano "+plan+". Entre em contato com o salão para contratar.");
-}
-
-function renderLoyalty(){
- let stamps=Number(localStorage.getItem("beauty_stamps")||0);
- document.getElementById("stamps").innerText=stamps+" / 10";
-}
-
-document.getElementById("date").min=new Date().toISOString().split("T")[0];
 renderServices();
 renderProfessionals();
 renderSlots();
-renderLoyalty();
 </script>
+
 </body>
 </html>
